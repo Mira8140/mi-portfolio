@@ -503,7 +503,6 @@ body.dark .sticker {
     transform: translateY(0);
 }
 
-/* Восстановленный hover-эффект */
 .section.visible .fav-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
@@ -654,6 +653,37 @@ body.dark .sticker {
 
 .stats-btn {
     z-index: 2;
+}
+
+/* =============================================
+   КАРТОЧКА "ДРУГИЕ" (инвертированные цвета)
+============================================= */
+.skill-card-other {
+    cursor: pointer;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+}
+
+.skill-card-other .skill-icon,
+.skill-card-other .skill-name {
+    color: #ffffff;
+    fill: #ffffff;
+}
+
+body.dark .skill-card-other {
+    background: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+body.dark .skill-card-other .skill-icon,
+body.dark .skill-card-other .skill-name {
+    color: #1a1a1a;
+    fill: #1a1a1a;
+}
+
+.section.visible .skill-card-other:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
 }
 
 /* =============================================
@@ -865,7 +895,7 @@ footer {
 }
 
 /* =============================================
-   МОДАЛЬНЫЕ ОКНА
+   МОДАЛЬНЫЕ ОКНА (общие)
 ============================================= */
 .modal-overlay {
     position: fixed;
@@ -952,6 +982,60 @@ footer {
 .modal-links a:hover {
     background: var(--accent);
     color: var(--bg);
+}
+
+/* =============================================
+   МОДАЛКА "ДРУГИЕ НАВЫКИ"
+============================================= */
+.other-skills-modal {
+    max-width: 400px;
+}
+
+.other-skills-grid {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.other-skill-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 15px;
+    width: 140px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.other-skill-icon {
+    font-size: 2rem;
+}
+
+.other-skill-name {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.other-skill-card .progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.other-skill-card .progress-fill {
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.8s ease;
 }
 
 /* =============================================
@@ -1091,56 +1175,75 @@ footer {
 }
 
 /* =============================================
-   АДАПТИВНОСТЬ
+   АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ
 ============================================= */
 @media (max-width: 600px) {
+    /* Разрешаем вертикальную прокрутку внутри секции */
+    .section {
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-align: start;
+        padding: 20px 10px;
+    }
+
+    /* Hero-карточка */
     .hero-card {
         width: 90%;
         height: auto;
+        padding: 20px;
     }
     .sticker {
-        top: 10px;
-        right: 10px;
-        font-size: 0.7rem;
-        padding: 5px 10px;
+        top: 5px;
+        right: 5px;
+        font-size: 0.6rem;
+        padding: 4px 8px;
     }
+
+    /* Таймлайн */
     .timeline {
-        padding-left: 20px;
+        padding-left: 15px;
     }
     .timeline::before {
-        left: 10px;
+        left: 8px;
     }
     .timeline-item::before {
-        left: -18px;
+        left: -15px;
+    }
+
+    /* Кнопки */
+    .theme-toggle,
+    .back-to-top {
+        width: 44px;
+        height: 44px;
+        font-size: 1.3rem;
     }
     .theme-toggle {
         top: 10px;
         right: 10px;
-        width: 48px;
-        height: 48px;
-        font-size: 1.5rem;
     }
     .back-to-top {
         bottom: 20px;
         right: 20px;
-        width: 48px;
-        height: 48px;
-        font-size: 1.5rem;
     }
+
+    /* Кнопка паука */
     .spider-btn {
-        left: 20px;
-        bottom: 20px;
-        width: 48px;
-        height: 48px;
-        font-size: 24px;
+        left: 15px;
+        bottom: 15px;
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
     }
     .spider-quote {
-        left: 70px;
-        font-size: 0.85rem;
-        padding: 10px 14px;
+        left: 60px;
+        font-size: 0.8rem;
+        padding: 8px 12px;
         white-space: normal;
         max-width: 200px;
     }
+
+    /* Модальные окна */
     .modal {
         padding: 20px;
     }
@@ -1151,120 +1254,52 @@ footer {
         padding: 10px 12px;
         font-size: 0.9rem;
     }
+
+    /* Карточки в «Любимом» */
+    .cards-grid {
+        gap: 15px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
     .fav-card {
-        width: 190px;
-        max-width: 190px;
+        width: 170px;
+        max-width: 170px;
     }
     .fav-card img {
-        height: 130px;
+        height: 110px;
     }
+
+    /* Секция «Навыки» */
     .skills-grid {
         grid-template-columns: 1fr;
+        gap: 15px;
+        margin-bottom: 20px;
     }
     .skill-card {
-        width: 80%;
+        width: 100%;
+        max-width: 280px;
     }
+
+    /* Контакты */
+    .contacts-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    /* Индикатор точек */
     .section-indicator {
-        right: 8px;
+        right: 5px;
         gap: 8px;
     }
     .dot {
         width: 8px;
         height: 8px;
     }
-    .contacts-grid {
-        grid-template-columns: 1fr;
-    }
+
+    /* Тосты */
     .toast {
         bottom: 20px;
         font-size: 0.8rem;
         padding: 10px 18px;
     }
-}
-/* =============================================
-   КАРТОЧКА "ДРУГИЕ" (инвертированные цвета)
-============================================= */
-.skill-card-other {
-    cursor: pointer;
-    background: #1a1a1a; /* тёмный фон в светлой теме */
-    border: 1px solid #1a1a1a;
-}
-
-.skill-card-other .skill-icon,
-.skill-card-other .skill-name {
-    color: #ffffff; /* белый текст и иконка */
-    fill: #ffffff;
-}
-
-/* В тёмной теме инвертируем наоборот */
-body.dark .skill-card-other {
-    background: #ffffff;
-    border: 1px solid #ffffff;
-}
-
-body.dark .skill-card-other .skill-icon,
-body.dark .skill-card-other .skill-name {
-    color: #1a1a1a;
-    fill: #1a1a1a;
-}
-
-/* Ховер эффект такой же, как у обычных карточек */
-.section.visible .skill-card-other:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
-}
-
-/* =============================================
-   МОДАЛКА "ДРУГИЕ НАВЫКИ"
-============================================= */
-.other-skills-modal {
-    max-width: 400px;
-}
-
-.other-skills-grid {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
-
-.other-skill-card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    padding: 15px;
-    width: 140px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-}
-
-.other-skill-icon {
-    font-size: 2rem;
-}
-
-.other-skill-name {
-    font-weight: 600;
-    font-size: 1rem;
-}
-
-/* Прогресс-бары внутри мини-карточек */
-.other-skill-card .progress-bar {
-    width: 100%;
-    height: 6px;
-    background: var(--border);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-top: 5px;
-}
-
-.other-skill-card .progress-fill {
-    height: 100%;
-    width: 0;
-    background: var(--accent);
-    border-radius: 3px;
-    transition: width 0.8s ease;
 }
