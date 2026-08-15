@@ -41,9 +41,10 @@ if (heroCard) {
 const typedElement = document.getElementById('typed');
 const phrases = [
     'Фуллстэк-разработчик',
-    'Вратарь',
+    'Футбольный вратарь',
     'Автолюбитель',
-    'Меломан'
+    'Меломан',
+    'Православный'
 ];
 let phraseIndex = 0;
 let charIndex = 0;
@@ -90,18 +91,76 @@ tabButtons.forEach(btn => {
 });
 
 // ==========================================
-// 5. ПОЯВЛЕНИЕ СЕКЦИЙ ПРИ СКРОЛЛЕ
+// 5. АНИМАЦИИ СЕКЦИЙ ПРИ СМЕНЕ АКТИВНОЙ СЕКЦИИ
 // ==========================================
 const sections = document.querySelectorAll('.section');
-const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
+const snapContainer = document.querySelector('.snap-container');
+let activeSectionId = null;
+
+function restartStaggerAnimations(section) {
+    const staggerItems = section.querySelectorAll('.stagger-item');
+    staggerItems.forEach((item, index) => {
+        item.style.transitionDelay = (index * 0.1) + 's';
+        void item.offsetWidth;
+    });
+}
+
+function restartProgressBars(section) {
+    const skillCards = section.querySelectorAll('.skill-card');
+    skillCards.forEach(card => {
+        const progress = card.dataset.progress;
+        const fill = card.querySelector('.progress-fill');
+        if (progress && fill) {
+            fill.style.width = '0';
+            void fill.offsetWidth;
+            fill.style.width = progress + '%';
         }
     });
-}, { threshold: 0.2 });
+}
 
-sections.forEach(section => sectionObserver.observe(section));
+function updateActiveSection() {
+    const scrollTop = snapContainer.scrollTop;
+    const containerHeight = snapContainer.clientHeight;
+
+    let newActiveSection = null;
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionBottom = sectionTop + section.offsetHeight;
+
+        if (scrollTop >= sectionTop - containerHeight * 0.5 && scrollTop < sectionBottom - containerHeight * 0.5) {
+            newActiveSection = section;
+        }
+    });
+
+    if (!newActiveSection) {
+        newActiveSection = sections[sections.length - 1];
+    }
+
+    if (newActiveSection && newActiveSection.id !== activeSectionId) {
+        activeSectionId = newActiveSection.id;
+
+        sections.forEach(section => {
+            section.classList.remove('visible');
+        });
+
+        newActiveSection.classList.add('visible');
+
+        restartStaggerAnimations(newActiveSection);
+
+        if (newActiveSection.id === 'skills') {
+            restartProgressBars(newActiveSection);
+        }
+    }
+}
+
+snapContainer.addEventListener('scroll', () => {
+    requestAnimationFrame(updateActiveSection);
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+    updateActiveSection();
+});
 
 // ==========================================
 // 6. ПЛАВНЫЙ СКРОЛЛ ПО ЯКОРЯМ
@@ -112,7 +171,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const targetId = this.getAttribute('href');
         const targetElement = document.querySelector(targetId);
         if (targetElement) {
-            const snapContainer = document.querySelector('.snap-container');
             const offsetTop = targetElement.offsetTop;
             snapContainer.scrollTo({
                 top: offsetTop,
@@ -126,7 +184,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // 7. КНОПКА «НАВЕРХ»
 // ==========================================
 const backToTopBtn = document.getElementById('backToTop');
-const snapContainer = document.querySelector('.snap-container');
 
 function toggleBackToTop() {
     if (snapContainer.scrollTop > window.innerHeight * 0.5) {
@@ -146,7 +203,7 @@ backToTopBtn.addEventListener('click', () => {
 });
 
 // ==========================================
-// 8. PRELOADER (скрываем через 0.8 сек)
+// 8. PRELOADER
 // ==========================================
 window.addEventListener('DOMContentLoaded', () => {
     const preloader = document.getElementById('preloader');
@@ -165,25 +222,26 @@ const spiderQuote = document.getElementById('spiderQuote');
 
 if (spiderBtn && spiderQuote) {
     spiderBtn.addEventListener('click', () => {
-        // Включаем тёмную тему, если она ещё не включена
         if (!body.classList.contains('dark')) {
             body.classList.add('dark');
             localStorage.setItem('theme', 'dark');
         }
-        // Перезапускаем анимацию фразы
         spiderQuote.classList.remove('show');
-        void spiderQuote.offsetWidth; // форсируем reflow
+        void spiderQuote.offsetWidth;
         spiderQuote.classList.add('show');
     });
 }
 
 // ==========================================
-// 10. СЕКРЕТНАЯ ПАСХАЛКА «ЗМЕЙКА»
+// 10. СЕКРЕТНАЯ ПАСХАЛКА «ЗМЕЙКА» (ТОЛЬКО ДЛЯ ДЕСКТОПА)
 // ==========================================
 let spiderClickCount = 0;
 let snakeGame = null;
 
-if (spiderBtn) {
+// Проверяем, есть ли поддержка hover (мышь)
+const isDesktop = window.matchMedia('(hover: hover)').matches;
+
+if (spiderBtn && isDesktop) {
     spiderBtn.addEventListener('click', () => {
         spiderClickCount++;
         if (spiderClickCount >= 5) {
@@ -214,7 +272,6 @@ function openSnakeGame() {
     snakeGame.start();
 }
 
-// Класс игры «Змейка»
 class SnakeGame {
     constructor(canvas, scoreSpan) {
         this.canvas = canvas;
@@ -348,7 +405,6 @@ if (listenModal) {
     });
 }
 
-// Делегирование кликов по кнопкам «Слушать»
 document.addEventListener('click', (e) => {
     if (e.target.classList.contains('listen-btn')) {
         const card = e.target.closest('.music-card');
@@ -376,32 +432,174 @@ document.addEventListener('click', (e) => {
 });
 
 // ==========================================
-// 12. АНИМИРОВАННЫЕ СЧЁТЧИКИ
+// 12. МОДАЛЬНОЕ ОКНО ДОСТИЖЕНИЙ
 // ==========================================
-const counters = document.querySelectorAll('.counter');
-const counterObserver = new IntersectionObserver((entries) => {
+const statsBtn = document.getElementById('statsBtn');
+const statsModal = document.getElementById('statsModal');
+const statsModalClose = document.getElementById('statsModalClose');
+
+statsBtn.addEventListener('click', () => {
+    statsModal.classList.add('active');
+    animateCounters();
+});
+
+statsModalClose.addEventListener('click', () => {
+    statsModal.classList.remove('active');
+    const counters = statsModal.querySelectorAll('.counter');
+    counters.forEach(c => c.textContent = '0');
+});
+
+statsModal.addEventListener('click', (e) => {
+    if (e.target === statsModal) {
+        statsModal.classList.remove('active');
+        const counters = statsModal.querySelectorAll('.counter');
+        counters.forEach(c => c.textContent = '0');
+    }
+});
+
+function animateCounters() {
+    const counters = statsModal.querySelectorAll('.counter');
+    counters.forEach(counter => {
+        const target = parseInt(counter.dataset.target);
+        const duration = 1500;
+        let startTime = null;
+
+        function update(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            const current = Math.floor(progress * target);
+            counter.textContent = current;
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                counter.textContent = target;
+            }
+        }
+        requestAnimationFrame(update);
+    });
+}
+
+// ==========================================
+// 13. ИНДИКАТОР СЕКЦИЙ
+// ==========================================
+const indicatorDots = document.querySelectorAll('.dot');
+
+function updateActiveDot(activeId) {
+    indicatorDots.forEach(dot => {
+        dot.classList.toggle('active', dot.dataset.target === `#${activeId}`);
+    });
+}
+
+const sectionIndicatorObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            const counter = entry.target;
-            const target = parseInt(counter.dataset.target);
-            const duration = 1500;
-            let startTime = null;
-
-            function updateCounter(timestamp) {
-                if (!startTime) startTime = timestamp;
-                const progress = Math.min((timestamp - startTime) / duration, 1);
-                const current = Math.floor(progress * target);
-                counter.textContent = current;
-                if (progress < 1) {
-                    requestAnimationFrame(updateCounter);
-                } else {
-                    counter.textContent = target;
-                }
-            }
-            requestAnimationFrame(updateCounter);
-            counterObserver.unobserve(counter);
+            updateActiveDot(entry.target.id);
         }
     });
-}, { threshold: 0.5 });
+}, { threshold: 0.6 });
 
-counters.forEach(counter => counterObserver.observe(counter));
+sections.forEach(section => sectionIndicatorObserver.observe(section));
+
+indicatorDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+        const targetId = dot.dataset.target;
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+            const offsetTop = targetElement.offsetTop;
+            snapContainer.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+// ==========================================
+// 14. КНОПКИ «ПОДРОБНЕЕ» В ТАЙМЛАЙНЕ
+// ==========================================
+document.querySelectorAll('.details-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const content = btn.nextElementSibling;
+        if (!content) return;
+        content.classList.toggle('open');
+        btn.textContent = content.classList.contains('open') ? 'Скрыть' : 'Подробнее';
+    });
+});
+
+// ==========================================
+// 15. ТОСТЫ (УВЕДОМЛЕНИЯ)
+// ==========================================
+function showToast(message) {
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => {
+        toast.classList.add('show');
+    });
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// ==========================================
+// 16. КОПИРОВАНИЕ EMAIL
+// ==========================================
+const copyEmailCard = document.getElementById('copyEmail');
+
+if (copyEmailCard) {
+    copyEmailCard.addEventListener('click', async () => {
+        const emailSpan = copyEmailCard.querySelector('.email-address');
+        if (!emailSpan) return;
+        const email = emailSpan.textContent.trim();
+        try {
+            await navigator.clipboard.writeText(email);
+            showToast('Email скопирован');
+        } catch (err) {
+            console.error('Не удалось скопировать:', err);
+            showToast('Ошибка копирования');
+        }
+    });
+}
+
+// ==========================================
+// 17. МОДАЛКА "ДРУГИЕ НАВЫКИ"
+// ==========================================
+const otherSkillsBtn = document.getElementById('otherSkillsBtn');
+const otherSkillsModal = document.getElementById('otherSkillsModal');
+const otherSkillsModalClose = document.getElementById('otherSkillsModalClose');
+
+if (otherSkillsBtn && otherSkillsModal) {
+    otherSkillsBtn.addEventListener('click', () => {
+        otherSkillsModal.classList.add('active');
+        setTimeout(() => {
+            const fills = otherSkillsModal.querySelectorAll('.progress-fill');
+            fills.forEach(fill => {
+                const progress = fill.dataset.progress;
+                fill.style.width = progress + '%';
+            });
+        }, 100);
+    });
+
+    otherSkillsModalClose.addEventListener('click', () => {
+        otherSkillsModal.classList.remove('active');
+        const fills = otherSkillsModal.querySelectorAll('.progress-fill');
+        fills.forEach(fill => fill.style.width = '0');
+    });
+
+    otherSkillsModal.addEventListener('click', (e) => {
+        if (e.target === otherSkillsModal) {
+            otherSkillsModal.classList.remove('active');
+            const fills = otherSkillsModal.querySelectorAll('.progress-fill');
+            fills.forEach(fill => fill.style.width = '0');
+        }
+    });
+}

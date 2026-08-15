@@ -34,6 +34,22 @@ body {
     overflow: hidden;
 }
 
+/* Улучшенная типографика */
+h1, h2, h3, .name {
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 40px;
+    text-align: center;
+    color: var(--accent);
+    position: relative;
+    z-index: 1;
+}
+
 /* =============================================
    КОНТЕЙНЕР СНАП-ПРОКРУТКИ
 ============================================= */
@@ -56,7 +72,9 @@ body {
     padding: 40px 20px;
     box-sizing: border-box;
     opacity: 0;
-    transition: opacity 0.6s ease;
+    filter: blur(8px);
+    transform: scale(0.98);
+    transition: opacity 0.6s ease, filter 0.6s ease, transform 0.6s ease;
     background-size: cover;
     background-position: center;
     position: relative;
@@ -65,12 +83,13 @@ body {
 
 .section.visible {
     opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
 }
 
 /* =============================================
    ФОНЫ ДЛЯ КАЖДОЙ СЕКЦИИ (с учётом темы)
 ============================================= */
-/* Светлая тема — белый полупрозрачный слой */
 body:not(.dark) #hero {
     background-image: 
         linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)),
@@ -102,7 +121,6 @@ body:not(.dark) footer.section {
         url('imagesss/sec6.jpg');
 }
 
-/* Тёмная тема — тёмный полупрозрачный слой */
 body.dark #hero {
     background-image: 
         linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
@@ -184,6 +202,34 @@ body.dark footer.section {
 }
 
 /* =============================================
+   ИНДИКАТОР СЕКЦИЙ
+============================================= */
+.section-indicator {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 100;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s, transform 0.3s;
+    cursor: pointer;
+}
+
+.dot.active {
+    background: var(--accent);
+    transform: scale(1.3);
+}
+
+/* =============================================
    HERO-СЕКЦИЯ И 3D-КАРТОЧКА
 ============================================= */
 .hero-card {
@@ -197,6 +243,30 @@ body.dark footer.section {
     transform-style: preserve-3d;
     position: relative;
     z-index: 1;
+}
+
+/* Стикер-облако */
+.sticker {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #333;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 2;
+    white-space: nowrap;
+    user-select: none;
+    pointer-events: none;
+}
+
+body.dark .sticker {
+    background: #2a2a2a;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(255,255,255,0.1);
 }
 
 .card-front {
@@ -231,6 +301,14 @@ body.dark footer.section {
     margin-bottom: 15px;
 }
 
+.extra-info {
+    font-size: 0.85rem;
+    color: var(--text);
+    opacity: 0.7;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
 .typing-text {
     font-size: 1rem;
     min-height: 1.5em;
@@ -262,18 +340,6 @@ body.dark footer.section {
 }
 
 /* =============================================
-   ЗАГОЛОВКИ И ТЕКСТ
-============================================= */
-h2 {
-    font-size: 2rem;
-    margin-bottom: 40px;
-    text-align: center;
-    color: var(--accent);
-    position: relative;
-    z-index: 1;
-}
-
-/* =============================================
    ТАЙМЛАЙН
 ============================================= */
 .timeline {
@@ -298,6 +364,14 @@ h2 {
     position: relative;
     margin-bottom: 40px;
     width: 100%;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.section.visible .stagger-item {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .timeline-item::before {
@@ -318,10 +392,46 @@ h2 {
     padding: 15px 20px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: background 0.3s;
+}
+
+.content:hover {
+    background: var(--bg);
+}
+
+.details-btn {
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 10px;
+    padding: 5px 0;
+    text-decoration: underline;
+    transition: opacity 0.3s;
+}
+
+.details-btn:hover {
+    opacity: 0.7;
+}
+
+.details-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, margin-top 0.4s ease;
+    margin-top: 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.details-content.open {
+    max-height: 200px;
+    margin-top: 10px;
 }
 
 /* =============================================
-   ЛЮБИМОЕ (ТАБЫ И КАРТОЧКИ)
+   ЛЮБИМОЕ
 ============================================= */
 .favorites-tabs {
     display: flex;
@@ -355,7 +465,6 @@ h2 {
     display: block;
 }
 
-/* Горизонтальная лента карточек */
 .cards-grid {
     display: flex;
     flex-wrap: nowrap;
@@ -365,14 +474,13 @@ h2 {
     padding: 10px 20px 20px;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    align-items: flex-start; /* важно, чтобы соседние карточки не растягивались */
+    align-items: flex-start;
 }
 
 .cards-grid::-webkit-scrollbar {
     display: none;
 }
 
-/* Общие стили карточек */
 .fav-card {
     flex: 0 0 auto;
     width: 225px;
@@ -382,13 +490,25 @@ h2 {
     padding: 12px;
     text-align: center;
     scroll-snap-align: start;
-    transition: transform 0.3s;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     position: relative;
     overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
 }
 
-/* Карточки музыки имеют фиксированную высоту, чтобы кнопка не влияла на размер */
+.section.visible .fav-card {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Восстановленный hover-эффект */
+.section.visible .fav-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
 .fav-card.music-card {
     height: 250px;
     display: flex;
@@ -398,7 +518,6 @@ h2 {
     padding-bottom: 10px;
 }
 
-/* Изображение в карточке */
 .fav-card img {
     width: 100%;
     height: 150px;
@@ -408,7 +527,6 @@ h2 {
     flex-shrink: 0;
 }
 
-/* Название песни */
 .song-info {
     margin-bottom: 5px;
     font-size: 0.95rem;
@@ -416,13 +534,12 @@ h2 {
     flex-shrink: 0;
 }
 
-/* Кнопка «Слушать» */
 .listen-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    margin-top: auto; /* прижимаем к низу */
+    margin-top: auto;
     padding: 8px 16px;
     background: #1db954;
     color: white;
@@ -439,14 +556,12 @@ h2 {
     z-index: 2;
 }
 
-/* При наведении на карточку кнопка появляется */
 .music-card:hover .listen-btn {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
 }
 
-/* На мобильных (без hover) кнопка всегда видна */
 @media (hover: none) {
     .listen-btn {
         opacity: 1;
@@ -455,7 +570,6 @@ h2 {
     }
 }
 
-/* Скрытый блок ссылок для модалки */
 .song-links.hidden {
     display: none;
 }
@@ -464,43 +578,195 @@ h2 {
    НАВЫКИ
 ============================================= */
 .skills-grid {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    justify-items: center;
     z-index: 1;
+    margin-bottom: 40px;
 }
 
-.skill-item {
+.skill-card {
     background: var(--card-bg);
-    padding: 12px 25px;
-    border-radius: 20px;
+    border-radius: 16px;
+    padding: 20px;
+    width: 180px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.section.visible .skill-card {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section.visible .skill-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
+.skill-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
+.skill-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 12px;
+    color: var(--accent);
+}
+
+.skill-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: var(--text);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 1s ease;
+}
+
+.skill-level {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.stats-btn {
+    z-index: 2;
+}
+
+/* =============================================
+   СЧЁТЧИКИ (В МОДАЛКЕ)
+============================================= */
+.counters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.counter-item {
+    background: var(--card-bg);
+    padding: 15px 20px;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 100px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.counter {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: inline-block;
+}
+
+.counter-plus {
+    font-size: 1.5rem;
     font-weight: 500;
-    transition: background 0.3s;
+    color: var(--accent);
+    margin-left: 3px;
+}
+
+.counter-label {
+    display: block;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin-top: 5px;
 }
 
 /* =============================================
    КОНТАКТЫ
 ============================================= */
-.contacts-links {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
+.contacts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
     z-index: 1;
 }
 
-.contact-link {
+.contact-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
     text-decoration: none;
-    color: var(--accent);
-    font-weight: 500;
-    font-size: 1.1rem;
-    border-bottom: 2px solid transparent;
-    transition: border-color 0.3s;
+    color: var(--text);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    transform: translateY(20px);
 }
 
-.contact-link:hover {
-    border-color: var(--accent);
+.section.visible .contact-card {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section.visible .contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.contact-icon {
+    width: 30px;
+    height: 30px;
+    fill: var(--accent);
+    margin-bottom: 5px;
+}
+
+.contact-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.contact-desc {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.resume-card {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+.resume-card .contact-icon {
+    fill: var(--bg);
 }
 
 /* =============================================
@@ -549,10 +815,7 @@ footer {
 }
 
 @keyframes spiderAppear {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .spider-quote {
@@ -588,34 +851,13 @@ footer {
 }
 
 @keyframes spiderDrop {
-    0% {
-        top: -120px;
-        opacity: 0;
-    }
-    20% {
-        top: 20px;
-        opacity: 1;
-    }
-    40% {
-        top: 20px;
-        transform: rotate(4deg);
-    }
-    55% {
-        top: 20px;
-        transform: rotate(-4deg);
-    }
-    70% {
-        top: 20px;
-        transform: rotate(3deg);
-    }
-    85% {
-        top: 20px;
-        opacity: 1;
-    }
-    100% {
-        top: -120px;
-        opacity: 0;
-    }
+    0% { top: -120px; opacity: 0; }
+    20% { top: 20px; opacity: 1; }
+    40% { top: 20px; transform: rotate(4deg); }
+    55% { top: 20px; transform: rotate(-4deg); }
+    70% { top: 20px; transform: rotate(3deg); }
+    85% { top: 20px; opacity: 1; }
+    100% { top: -120px; opacity: 0; }
 }
 
 .spider-quote.show {
@@ -623,7 +865,7 @@ footer {
 }
 
 /* =============================================
-   МОДАЛЬНОЕ ОКНО
+   МОДАЛЬНЫЕ ОКНА
 ============================================= */
 .modal-overlay {
     position: fixed;
@@ -713,188 +955,8 @@ footer {
 }
 
 /* =============================================
-   АДАПТИВНОСТЬ
+   ИГРА «ЗМЕЙКА»
 ============================================= */
-@media (max-width: 600px) {
-    .hero-card {
-        width: 90%;
-        height: auto;
-    }
-    .timeline {
-        padding-left: 20px;
-    }
-    .timeline::before {
-        left: 10px;
-    }
-    .timeline-item::before {
-        left: -18px;
-    }
-    .theme-toggle {
-        top: 10px;
-        right: 10px;
-        width: 48px;
-        height: 48px;
-        font-size: 1.5rem;
-    }
-    .back-to-top {
-        bottom: 20px;
-        right: 20px;
-        width: 48px;
-        height: 48px;
-        font-size: 1.5rem;
-    }
-    .spider-btn {
-        left: 20px;
-        bottom: 20px;
-        width: 48px;
-        height: 48px;
-        font-size: 24px;
-    }
-    .spider-quote {
-        left: 70px;
-        font-size: 0.85rem;
-        padding: 10px 14px;
-        white-space: normal;
-        max-width: 200px;
-    }
-    .modal {
-        padding: 20px;
-    }
-    #modalSongTitle {
-        font-size: 1.1rem;
-    }
-    .modal-links a {
-        padding: 10px 12px;
-        font-size: 0.9rem;
-    }
-    .fav-card {
-        width: 190px;
-        max-width: 190px;
-    }
-    .fav-card img {
-        height: 130px;
-    }
-}
-/* =============================================
-   PRELOADER
-============================================= */
-.preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--bg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
-.preloader.hidden {
-    opacity: 0;
-    visibility: hidden;
-}
-
-.preloader-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-.preloader-text {
-    margin-top: 15px;
-    font-size: 1rem;
-    color: var(--text);
-    opacity: 0.7;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-/* Параллакс фонов для десктопа */
-@media (min-width: 1025px) {
-    .section {
-        background-attachment: fixed;
-    }
-}
-/* Счётчики */
-.counters {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-    margin-top: 50px;
-    z-index: 1;
-}
-
-.counter-item {
-    text-align: center;
-    background: var(--card-bg);
-    padding: 20px 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    min-width: 120px;
-    transition: transform 0.3s;
-}
-
-.counter-item:hover {
-    transform: translateY(-5px);
-}
-
-.counter {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--accent);
-    display: inline-block;
-}
-
-.counter-label {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    display: block;
-    margin-top: 5px;
-}
-.counter-plus {
-    font-size: 1.8rem;
-    font-weight: 500;
-    color: var(--accent);
-    margin-left: 5px;
-}
-
-/* Адаптивность */
-@media (max-width: 600px) {
-    .counters {
-        gap: 20px;
-    }
-    .counter-item {
-        padding: 15px 20px;
-        min-width: 100px;
-    }
-    .counter {
-        font-size: 2rem;
-    }
-}
-/* Эффект шторки для контента секции */
-.section-content {
-    clip-path: inset(0 50% 0 50%);
-    transition: clip-path 0.8s ease;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.section.visible .section-content {
-    clip-path: inset(0 0 0 0);
-}
-/* Модальное окно игры "Змейка" */
 .snake-modal {
     position: fixed;
     top: 0;
@@ -956,4 +1018,253 @@ footer {
     font-size: 0.8rem;
     opacity: 0.6;
     margin-top: 5px;
+}
+
+/* =============================================
+   PRELOADER
+============================================= */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.preloader-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.preloader-text {
+    margin-top: 15px;
+    font-size: 1rem;
+    color: var(--text);
+    opacity: 0.7;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* =============================================
+   ТОСТЫ (УВЕДОМЛЕНИЯ)
+============================================= */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--accent);
+    color: var(--bg);
+    padding: 12px 24px;
+    border-radius: 30px;
+    box-shadow: var(--shadow);
+    font-size: 0.9rem;
+    font-weight: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 9999;
+    white-space: nowrap;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* =============================================
+   АДАПТИВНОСТЬ
+============================================= */
+@media (max-width: 600px) {
+    .hero-card {
+        width: 90%;
+        height: auto;
+    }
+    .sticker {
+        top: 10px;
+        right: 10px;
+        font-size: 0.7rem;
+        padding: 5px 10px;
+    }
+    .timeline {
+        padding-left: 20px;
+    }
+    .timeline::before {
+        left: 10px;
+    }
+    .timeline-item::before {
+        left: -18px;
+    }
+    .theme-toggle {
+        top: 10px;
+        right: 10px;
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+    }
+    .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+    }
+    .spider-btn {
+        left: 20px;
+        bottom: 20px;
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+    }
+    .spider-quote {
+        left: 70px;
+        font-size: 0.85rem;
+        padding: 10px 14px;
+        white-space: normal;
+        max-width: 200px;
+    }
+    .modal {
+        padding: 20px;
+    }
+    #modalSongTitle {
+        font-size: 1.1rem;
+    }
+    .modal-links a {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+    .fav-card {
+        width: 190px;
+        max-width: 190px;
+    }
+    .fav-card img {
+        height: 130px;
+    }
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+    .skill-card {
+        width: 80%;
+    }
+    .section-indicator {
+        right: 8px;
+        gap: 8px;
+    }
+    .dot {
+        width: 8px;
+        height: 8px;
+    }
+    .contacts-grid {
+        grid-template-columns: 1fr;
+    }
+    .toast {
+        bottom: 20px;
+        font-size: 0.8rem;
+        padding: 10px 18px;
+    }
+}
+/* =============================================
+   КАРТОЧКА "ДРУГИЕ" (инвертированные цвета)
+============================================= */
+.skill-card-other {
+    cursor: pointer;
+    background: #1a1a1a; /* тёмный фон в светлой теме */
+    border: 1px solid #1a1a1a;
+}
+
+.skill-card-other .skill-icon,
+.skill-card-other .skill-name {
+    color: #ffffff; /* белый текст и иконка */
+    fill: #ffffff;
+}
+
+/* В тёмной теме инвертируем наоборот */
+body.dark .skill-card-other {
+    background: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+body.dark .skill-card-other .skill-icon,
+body.dark .skill-card-other .skill-name {
+    color: #1a1a1a;
+    fill: #1a1a1a;
+}
+
+/* Ховер эффект такой же, как у обычных карточек */
+.section.visible .skill-card-other:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
+/* =============================================
+   МОДАЛКА "ДРУГИЕ НАВЫКИ"
+============================================= */
+.other-skills-modal {
+    max-width: 400px;
+}
+
+.other-skills-grid {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.other-skill-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 15px;
+    width: 140px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.other-skill-icon {
+    font-size: 2rem;
+}
+
+.other-skill-name {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Прогресс-бары внутри мини-карточек */
+.other-skill-card .progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.other-skill-card .progress-fill {
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.8s ease;
 }
