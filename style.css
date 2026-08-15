@@ -1178,13 +1178,27 @@ footer {
    АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ
 ============================================= */
 @media (max-width: 600px) {
-    /* Разрешаем вертикальную прокрутку внутри секции */
-    .section {
+    /* Отключаем snap-прокрутку на мобильных */
+    .snap-container {
+        scroll-snap-type: none;
         overflow-y: auto;
-        overflow-x: hidden;
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-align: start;
-        padding: 20px 10px;
+    }
+
+    .section {
+        scroll-snap-align: none;
+        min-height: auto;
+        height: auto;
+        overflow-y: visible;
+        opacity: 1;
+        filter: none;
+        transform: none;
+        padding: 60px 15px;
+    }
+
+    .section.visible {
+        opacity: 1;
+        filter: none;
+        transform: none;
     }
 
     /* Hero-карточка */
