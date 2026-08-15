@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мирон Остапенко — портфолио</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Preloader -->
+<div id="preloader" class="preloader">
+    <div class="preloader-spinner"></div>
+    <p class="preloader-text">Загрузка...</p>
+</div>
+    <!-- Кнопка переключения темы -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Сменить тему">🌓</button>
+ <main class="snap-container">
+    <!-- HERO -->
+    <section id="hero" class="section">
+        <div class="section-content">
+        <div class="hero-card" id="heroCard">
+            <div class="card-front">
+                <img src="imagesss/MiFot.jpg" alt="Мирон" class="avatar">
+                <h1 class="name">Мирон Остапенко</h1>
+                <p class="subtitle">Самая великая вещь на свете — уметь принадлежать себе</p>
+                <p class="typing-text"><span id="typed"></span></p>
+                <div class="hero-buttons">
+                    <a href="#timeline" class="btn">О себе</a>
+                    <a href="#favorites" class="btn">Любимое</a>
+                    <a href="#contacts" class="btn">Контакты</a>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- ТАЙМЛАЙН -->
+    <section id="timeline" class="section">
+        <div class="section-content">
+        <h2>Мой путь</h2>
+        <div class="timeline">
+            <div class="timeline-item left">
+                <div class="content">
+                    <h3>2012–2021</h3>
+                    <p>Школа №20, 1–10 классы</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="content">
+                    <h3>2021–2023</h3>
+                    <p>Школа №17, доучился, начал изучать HTML/CSS</p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="content">
+                    <h3>2023 – наст. время</h3>
+                    <p>РТУ МИРЭА, Фуллстэк-разработка, первые мини-сайты</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="content">
+                    <h3>2026</h3>
+                    <p>Углублённое изучение JavaScript</p>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- ЛЮБИМОЕ -->
+    <section id="favorites" class="section">
+        <div class="section-content">
+        <h2>Любимое</h2>
+        <div class="favorites-tabs">
+            <button class="tab-btn active" data-tab="music">Музыка</button>
+            <button class="tab-btn" data-tab="football">Футбол</button>
+            <button class="tab-btn" data-tab="movies">Кино</button>
+        </div>
+        <div class="tab-content active" id="music">
+            <div class="cards-grid">
+                <!-- Пример карточки песни, скопируй для каждой -->
+                <div class="fav-card music-card">
+                        <img src="imagesss/Sickick.jpg" alt="Обложка трека">
+                        <p class="song-info">Sickick — Often</p>
+                        <button class="listen-btn" aria-label="Слушать">Слушать ▶</button>
+                        <div class="song-links hidden">
+                            <a href="https://vk.ru/audio232905760_456240043_53f71c265c6d66f552" target="_blank">VK</a>
+                            <a href="https://open.spotify.com/track/6guIpm21zTdOTtIRsXFQBV?si=fe9379c3d8cf4380" target="_blank">Spotify</a>
+                        </div>
+                    </div>
+                <div class="fav-card music-card">
+                        <img src="imagesss/Рокет.jpg" alt="Обложка трека">
+                        <p class="song-info">ROCKET — Perfect World</p>
+                        <button class="listen-btn" aria-label="Слушать">Слушать ▶</button>
+                        <div class="song-links hidden">
+                            <a href="https://vk.ru/audio-2001376463_151376463" target="_blank">VK</a>
+                            <a href="https://music.apple.com/ru/song/perfect-world/6785890081" target="_blank">Apple Music</a>
+                            <a href="https://music.yandex.ru/album/42850793/track/153145717?utm_source=web&utm_medium=copy_link" target="_blank">Yandex Music</a>
+                        </div>
+                    </div>
+                    <div class="fav-card music-card">
+                        <img src="imagesss/sunw.jpg" alt="Обложка трека">
+                        <p class="song-info">Post Malone — Sunflower</p>
+                        <button class="listen-btn" aria-label="Слушать">Слушать ▶</button>
+                        <div class="song-links hidden">
+                            <a href="https://vk.ru/audio-2001093348_55093348" target="_blank">VK</a>
+                            <a href="https://music.apple.com/ru/song/sunflower-spider-man-into-the-spider-verse/1445949267" target="_blank">Apple Music</a>
+                            <a href="https://music.yandex.ru/album/32833197/track/44103080?utm_source=web&utm_medium=copy_link" target="_blank">Yandex Music</a>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="tab-content" id="football">
+            <div class="cards-grid">
+                <div class="fav-card">
+                    <img src="imagesss/barca1.jpg" alt="Барселона">
+                    <p>ФК Барселона</p>
+                </div>
+                <div class="fav-card">
+                    <img src="imagesss/cska1.jpg" alt="ЦСКА">
+                    <p>ПФК ЦСКА</p>
+                </div>
+                <div class="fav-card">
+                    <img src="imagesss/MU1.jpg" alt="Манчестер Юнайтед">
+                    <p>ФК Манчестер Юнайтед</p>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content" id="movies">
+            <div class="cards-grid">
+                <div class="fav-card">
+                    <img src="imagesss/мевдедитоля.jpg" alt="Фильм">
+                    <p>Молодёжка</p>
+                </div>
+                <div class="fav-card">
+                    <img src="imagesss/AoTP.jpg" alt="Фильм">
+                    <p>Атака Титанов</p>
+                </div>
+                <div class="fav-card">
+                    <img src="imagesss/MG.jpg" alt="Фильм">
+                    <p>Человек-паук: Паутина Вселенных</p>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- НАВЫКИ -->
+    <section id="skills" class="section">
+        <div class="section-content">
+        <h2>Навыки</h2>
+        <div class="skills-grid">
+            <div class="skill-item">HTML</div>
+            <div class="skill-item">CSS</div>
+            <div class="skill-item">JavaScript</div>
+            <div class="skill-item">Figma</div>
+            <div class="skill-item">Git</div>
+        </div>
+        <div class="counters" id="counters">
+    <div class="counter-item">
+        <span class="counter" data-target="5">0</span><span class="counter-plus">+</span>
+        <span class="counter-label">Проекты</span>
+    </div>
+    <div class="counter-item">
+        <span class="counter" data-target="1000">0</span><span class="counter-plus">+</span>
+        <span class="counter-label">Часы кода</span>
+    </div>
+    <div class="counter-item">
+        <span class="counter" data-target="3">0</span>
+        <span class="counter-label">Года опыта</span>
+    </div>
+    <div class="counter-item">
+        <span class="counter" data-target="5">0</span>
+        <span class="counter-label">Навыки</span>
+    </div>
+</div>
+        </div>
+    </section>
+
+    <!-- КОНТАКТЫ -->
+    <section id="contacts" class="section">
+        <div class="section-content">
+        <h2>Контакты</h2>
+        <div class="contacts-links">
+            <!-- Вставь свои ссылки, я оставил заглушки -->
+            <a href="https://github.com/твой-логин" target="_blank" class="contact-link">GitHub</a>
+            <a href="https://t.me/твой-username" target="_blank" class="contact-link">Telegram</a>
+            <a href="mailto:твоя@почта.ru" class="contact-link">Email</a>
+            <!-- Можно добавить VK, Twitter и т.д. -->
+        </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Мирон Остапенко</p>
+    </footer>
+</main>
+
+ <button id="backToTop" class="back-to-top" title="Наверх">↑</button>
+ <button id="spiderBtn" class="spider-btn" title="Человек-паук">🕷️</button>
+ <div id="spiderQuote" class="spider-quote">
+    С великой силой приходит великая ответственность!
+</div>
+<!-- Модальное окно для выбора платформы -->
+<div id="listenModal" class="modal-overlay">
+    <div class="modal">
+        <button class="modal-close" id="modalClose">✕</button>
+        <h3 id="modalSongTitle">Название трека</h3>
+        <div class="modal-links" id="modalLinks">
+            <!-- Сюда динамически попадут ссылки из карточки -->
+        </div>
+    </div>
+</div>
+<!-- Модальное окно для игры "Змейка" -->
+<div id="snakeModal" class="snake-modal">
+    <div class="snake-modal-content">
+        <button class="snake-close" id="snakeClose">✕</button>
+        <h3>Змейка</h3>
+        <canvas id="snakeCanvas" width="300" height="300"></canvas>
+        <p class="snake-score">Счёт: <span id="snakeScore">0</span></p>
+        <p class="snake-hint">Управление стрелками на клавиатуре</p>
+    </div>
+</div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,959 @@
+/* =============================================
+   ОБЩИЕ СТИЛИ И ПЕРЕМЕННЫЕ
+============================================= */
+:root {
+    --bg: #ffffff;
+    --text: #1a1a1a;
+    --card-bg: #f0f0f0;
+    --border: #cccccc;
+    --accent: #2c2c2c;
+    --shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+body.dark {
+    --bg: #121212;
+    --text: #e0e0e0;
+    --card-bg: #1e1e1e;
+    --border: #333333;
+    --accent: #ffffff;
+    --shadow: 0 20px 40px rgba(255,255,255,0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.3s, color 0.3s;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* =============================================
+   КОНТЕЙНЕР СНАП-ПРОКРУТКИ
+============================================= */
+.snap-container {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+}
+
+/* =============================================
+   СЕКЦИИ
+============================================= */
+.section {
+    scroll-snap-align: start;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.section.visible {
+    opacity: 1;
+}
+
+/* =============================================
+   ФОНЫ ДЛЯ КАЖДОЙ СЕКЦИИ (с учётом темы)
+============================================= */
+/* Светлая тема — белый полупрозрачный слой */
+body:not(.dark) #hero {
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)),
+        url('imagesss/sec5.jpg');
+}
+body:not(.dark) #timeline {
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
+        url('imagesss/sec1.jpg');
+}
+body:not(.dark) #favorites {
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
+        url('imagesss/sec2.jpg');
+}
+body:not(.dark) #skills {
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
+        url('imagesss/sec3.jpg');
+}
+body:not(.dark) #contacts {
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
+        url('imagesss/sec4.jpg');
+}
+body:not(.dark) footer.section {
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
+        url('imagesss/sec6.jpg');
+}
+
+/* Тёмная тема — тёмный полупрозрачный слой */
+body.dark #hero {
+    background-image: 
+        linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+        url('imagesss/sec5.jpg');
+}
+body.dark #timeline {
+    background-image: 
+        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+        url('imagesss/sec1.jpg');
+}
+body.dark #favorites {
+    background-image: 
+        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+        url('imagesss/sec2.jpg');
+}
+body.dark #skills {
+    background-image: 
+        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+        url('imagesss/sec3.jpg');
+}
+body.dark #contacts {
+    background-image: 
+        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+        url('imagesss/sec4.jpg');
+}
+body.dark footer.section {
+    background-image: 
+        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+        url('imagesss/sec6.jpg');
+}
+
+/* =============================================
+   КНОПКИ: ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ И «НАВЕРХ»
+============================================= */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    font-size: 1.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+    box-shadow: var(--shadow);
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 99;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    font-size: 1.8rem;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* =============================================
+   HERO-СЕКЦИЯ И 3D-КАРТОЧКА
+============================================= */
+.hero-card {
+    width: 350px;
+    height: 450px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    transition: transform 0.1s ease;
+    transform-style: preserve-3d;
+    position: relative;
+    z-index: 1;
+}
+
+.card-front {
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 30px;
+    text-align: center;
+}
+
+.avatar {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--accent);
+    margin-bottom: 20px;
+}
+
+.name {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+    color: var(--accent);
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 15px;
+}
+
+.typing-text {
+    font-size: 1rem;
+    min-height: 1.5em;
+    margin-bottom: 25px;
+    font-weight: 300;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn {
+    text-decoration: none;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    transition: opacity 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+/* =============================================
+   ЗАГОЛОВКИ И ТЕКСТ
+============================================= */
+h2 {
+    font-size: 2rem;
+    margin-bottom: 40px;
+    text-align: center;
+    color: var(--accent);
+    position: relative;
+    z-index: 1;
+}
+
+/* =============================================
+   ТАЙМЛАЙН
+============================================= */
+.timeline {
+    position: relative;
+    max-width: 700px;
+    margin: 0 auto;
+    padding-left: 40px;
+    z-index: 1;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+    z-index: 1;
+}
+
+.content {
+    background: var(--card-bg);
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+/* =============================================
+   ЛЮБИМОЕ (ТАБЫ И КАРТОЧКИ)
+============================================= */
+.favorites-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    z-index: 1;
+}
+
+.tab-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: var(--text);
+    transition: all 0.3s;
+}
+
+.tab-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Горизонтальная лента карточек */
+.cards-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 25px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 10px 20px 20px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    align-items: flex-start; /* важно, чтобы соседние карточки не растягивались */
+}
+
+.cards-grid::-webkit-scrollbar {
+    display: none;
+}
+
+/* Общие стили карточек */
+.fav-card {
+    flex: 0 0 auto;
+    width: 225px;
+    max-width: 225px;
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 12px;
+    text-align: center;
+    scroll-snap-align: start;
+    transition: transform 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Карточки музыки имеют фиксированную высоту, чтобы кнопка не влияла на размер */
+.fav-card.music-card {
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-bottom: 10px;
+}
+
+/* Изображение в карточке */
+.fav-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
+
+/* Название песни */
+.song-info {
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+/* Кнопка «Слушать» */
+.listen-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: auto; /* прижимаем к низу */
+    padding: 8px 16px;
+    background: #1db954;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(29, 185, 84, 0.4);
+    z-index: 2;
+}
+
+/* При наведении на карточку кнопка появляется */
+.music-card:hover .listen-btn {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* На мобильных (без hover) кнопка всегда видна */
+@media (hover: none) {
+    .listen-btn {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+}
+
+/* Скрытый блок ссылок для модалки */
+.song-links.hidden {
+    display: none;
+}
+
+/* =============================================
+   НАВЫКИ
+============================================= */
+.skills-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    z-index: 1;
+}
+
+.skill-item {
+    background: var(--card-bg);
+    padding: 12px 25px;
+    border-radius: 20px;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+/* =============================================
+   КОНТАКТЫ
+============================================= */
+.contacts-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    z-index: 1;
+}
+
+.contact-link {
+    text-decoration: none;
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 1.1rem;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.contact-link:hover {
+    border-color: var(--accent);
+}
+
+/* =============================================
+   ФУТЕР
+============================================= */
+footer {
+    text-align: center;
+    padding: 20px;
+    opacity: 0.8;
+    font-size: 0.9rem;
+    z-index: 1;
+}
+
+/* =============================================
+   КНОПКА ЧЕЛОВЕКА-ПАУКА И ФРАЗА
+============================================= */
+.spider-btn {
+    position: fixed;
+    left: 30px;
+    bottom: 30px;
+    z-index: 99;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 2px solid #e23636;
+    background: #1a1a1a;
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(226, 54, 54, 0.7);
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: spiderAppear 0.5s ease forwards;
+    opacity: 0;
+    transform: translateY(100px);
+}
+
+.spider-btn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 25px rgba(226, 54, 54, 1);
+}
+
+.spider-btn:active {
+    transform: scale(0.95);
+}
+
+@keyframes spiderAppear {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.spider-quote {
+    position: fixed;
+    top: -120px;
+    left: 80px;
+    background: #1a1a1a;
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 0 15px rgba(226, 54, 54, 0.6);
+    border: 1px solid #e23636;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 120;
+    white-space: nowrap;
+    animation-duration: 4s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.spider-quote::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    width: 2px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, #fff);
+    transform: translateX(-50%);
+}
+
+@keyframes spiderDrop {
+    0% {
+        top: -120px;
+        opacity: 0;
+    }
+    20% {
+        top: 20px;
+        opacity: 1;
+    }
+    40% {
+        top: 20px;
+        transform: rotate(4deg);
+    }
+    55% {
+        top: 20px;
+        transform: rotate(-4deg);
+    }
+    70% {
+        top: 20px;
+        transform: rotate(3deg);
+    }
+    85% {
+        top: 20px;
+        opacity: 1;
+    }
+    100% {
+        top: -120px;
+        opacity: 0;
+    }
+}
+
+.spider-quote.show {
+    animation-name: spiderDrop;
+}
+
+/* =============================================
+   МОДАЛЬНОЕ ОКНО
+============================================= */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 320px;
+    width: 90%;
+    text-align: center;
+    box-shadow: var(--shadow);
+    position: relative;
+    transform: translateY(30px) scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal {
+    transform: translateY(0) scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text);
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.modal-close:hover {
+    opacity: 1;
+}
+
+#modalSongTitle {
+    margin-bottom: 25px;
+    font-size: 1.3rem;
+    color: var(--accent);
+}
+
+.modal-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modal-links a {
+    display: block;
+    padding: 12px 15px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 500;
+    transition: background 0.3s, color 0.3s;
+}
+
+.modal-links a:hover {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+/* =============================================
+   АДАПТИВНОСТЬ
+============================================= */
+@media (max-width: 600px) {
+    .hero-card {
+        width: 90%;
+        height: auto;
+    }
+    .timeline {
+        padding-left: 20px;
+    }
+    .timeline::before {
+        left: 10px;
+    }
+    .timeline-item::before {
+        left: -18px;
+    }
+    .theme-toggle {
+        top: 10px;
+        right: 10px;
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+    }
+    .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+    }
+    .spider-btn {
+        left: 20px;
+        bottom: 20px;
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+    }
+    .spider-quote {
+        left: 70px;
+        font-size: 0.85rem;
+        padding: 10px 14px;
+        white-space: normal;
+        max-width: 200px;
+    }
+    .modal {
+        padding: 20px;
+    }
+    #modalSongTitle {
+        font-size: 1.1rem;
+    }
+    .modal-links a {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+    .fav-card {
+        width: 190px;
+        max-width: 190px;
+    }
+    .fav-card img {
+        height: 130px;
+    }
+}
+/* =============================================
+   PRELOADER
+============================================= */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.preloader-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.preloader-text {
+    margin-top: 15px;
+    font-size: 1rem;
+    color: var(--text);
+    opacity: 0.7;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+/* Параллакс фонов для десктопа */
+@media (min-width: 1025px) {
+    .section {
+        background-attachment: fixed;
+    }
+}
+/* Счётчики */
+.counters {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 50px;
+    z-index: 1;
+}
+
+.counter-item {
+    text-align: center;
+    background: var(--card-bg);
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    min-width: 120px;
+    transition: transform 0.3s;
+}
+
+.counter-item:hover {
+    transform: translateY(-5px);
+}
+
+.counter {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: inline-block;
+}
+
+.counter-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    display: block;
+    margin-top: 5px;
+}
+.counter-plus {
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-left: 5px;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .counters {
+        gap: 20px;
+    }
+    .counter-item {
+        padding: 15px 20px;
+        min-width: 100px;
+    }
+    .counter {
+        font-size: 2rem;
+    }
+}
+/* Эффект шторки для контента секции */
+.section-content {
+    clip-path: inset(0 50% 0 50%);
+    transition: clip-path 0.8s ease;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.section.visible .section-content {
+    clip-path: inset(0 0 0 0);
+}
+/* Модальное окно игры "Змейка" */
+.snake-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.snake-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.snake-modal-content {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    position: relative;
+    max-width: 340px;
+    width: 90%;
+}
+
+.snake-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text);
+}
+
+#snakeCanvas {
+    background: #000;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto 15px;
+}
+
+.snake-score {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.snake-hint {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    margin-top: 5px;
+}
