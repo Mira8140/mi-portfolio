@@ -1,5 +1,10 @@
 // ==========================================
-// 1. ПЕРЕКЛЮЧЕНИЕ ТЕМЫ
+// ПРОВЕРКА ШИРИНЫ ЭКРАНА
+// ==========================================
+const isMobile = window.innerWidth <= 600;
+
+// ==========================================
+// 1. ПЕРЕКЛЮЧЕНИЕ ТЕМЫ (работает везде)
 // ==========================================
 const themeToggle = document.getElementById('themeToggle');
 const body = document.body;
@@ -14,11 +19,11 @@ if (localStorage.getItem('theme') === 'dark') {
 }
 
 // ==========================================
-// 2. 3D-ЭФФЕКТ ДЛЯ КАРТОЧКИ HERO
+// 2. 3D-ЭФФЕКТ HERO (только десктоп)
 // ==========================================
 const heroCard = document.getElementById('heroCard');
 
-if (heroCard) {
+if (heroCard && !isMobile) {
     heroCard.addEventListener('mousemove', (e) => {
         const rect = heroCard.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -36,15 +41,14 @@ if (heroCard) {
 }
 
 // ==========================================
-// 3. АНИМИРОВАННЫЙ ТЕКСТ В HERO
+// 3. АНИМИРОВАННЫЙ ТЕКСТ (работает везде)
 // ==========================================
 const typedElement = document.getElementById('typed');
 const phrases = [
     'Фуллстэк-разработчик',
-    'Футбольный вратарь',
+    'Вратарь',
     'Автолюбитель',
-    'Меломан',
-    'Православный'
+    'Меломан'
 ];
 let phraseIndex = 0;
 let charIndex = 0;
@@ -75,7 +79,7 @@ function type() {
 type();
 
 // ==========================================
-// 4. ТАБЫ В СЕКЦИИ «ЛЮБИМОЕ»
+// 4. ТАБЫ (работает везде)
 // ==========================================
 const tabButtons = document.querySelectorAll('.tab-btn');
 const tabContents = document.querySelectorAll('.tab-content');
@@ -91,10 +95,9 @@ tabButtons.forEach(btn => {
 });
 
 // ==========================================
-// 5. АНИМАЦИИ СЕКЦИЙ ПРИ СМЕНЕ АКТИВНОЙ СЕКЦИИ
+// 5. УПРАВЛЕНИЕ СЕКЦИЯМИ (только десктоп)
 // ==========================================
 const sections = document.querySelectorAll('.section');
-const snapContainer = document.querySelector('.snap-container');
 let activeSectionId = null;
 
 function restartStaggerAnimations(section) {
@@ -119,6 +122,7 @@ function restartProgressBars(section) {
 }
 
 function updateActiveSection() {
+    const snapContainer = document.querySelector('.snap-container');
     const scrollTop = snapContainer.scrollTop;
     const containerHeight = snapContainer.clientHeight;
 
@@ -154,13 +158,16 @@ function updateActiveSection() {
     }
 }
 
-snapContainer.addEventListener('scroll', () => {
-    requestAnimationFrame(updateActiveSection);
-});
-
-window.addEventListener('DOMContentLoaded', () => {
-    updateActiveSection();
-});
+if (!isMobile) {
+    const snapContainer = document.querySelector('.snap-container');
+    snapContainer.addEventListener('scroll', () => {
+        requestAnimationFrame(updateActiveSection);
+    });
+    window.addEventListener('DOMContentLoaded', updateActiveSection);
+} else {
+    // На мобильных все секции видимы сразу
+    sections.forEach(section => section.classList.add('visible'));
+}
 
 // ==========================================
 // 6. ПЛАВНЫЙ СКРОЛЛ ПО ЯКОРЯМ
@@ -171,11 +178,16 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const targetId = this.getAttribute('href');
         const targetElement = document.querySelector(targetId);
         if (targetElement) {
-            const offsetTop = targetElement.offsetTop;
-            snapContainer.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
+            if (isMobile) {
+                // На мобильных используем обычный скролл body
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                const snapContainer = document.querySelector('.snap-container');
+                snapContainer.scrollTo({
+                    top: targetElement.offsetTop,
+                    behavior: 'smooth'
+                });
+            }
         }
     });
 });
@@ -186,20 +198,26 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 const backToTopBtn = document.getElementById('backToTop');
 
 function toggleBackToTop() {
-    if (snapContainer.scrollTop > window.innerHeight * 0.5) {
+    const scrollTop = isMobile ? window.scrollY : document.querySelector('.snap-container').scrollTop;
+    if (scrollTop > window.innerHeight * 0.5) {
         backToTopBtn.classList.add('visible');
     } else {
         backToTopBtn.classList.remove('visible');
     }
 }
 
-snapContainer.addEventListener('scroll', toggleBackToTop);
+if (isMobile) {
+    window.addEventListener('scroll', toggleBackToTop);
+} else {
+    document.querySelector('.snap-container').addEventListener('scroll', toggleBackToTop);
+}
 
 backToTopBtn.addEventListener('click', () => {
-    snapContainer.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
+    if (isMobile) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        document.querySelector('.snap-container').scrollTo({ top: 0, behavior: 'smooth' });
+    }
 });
 
 // ==========================================
@@ -215,7 +233,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// 9. КНОПКА ЧЕЛОВЕКА-ПАУКА И ФРАЗА ДЯДИ БЕНА
+// 9. КНОПКА ЧЕЛОВЕКА-ПАУКА И ФРАЗА
 // ==========================================
 const spiderBtn = document.getElementById('spiderBtn');
 const spiderQuote = document.getElementById('spiderQuote');
@@ -233,15 +251,12 @@ if (spiderBtn && spiderQuote) {
 }
 
 // ==========================================
-// 10. СЕКРЕТНАЯ ПАСХАЛКА «ЗМЕЙКА» (ТОЛЬКО ДЛЯ ДЕСКТОПА)
+// 10. СЕКРЕТНАЯ ПАСХАЛКА (только десктоп)
 // ==========================================
 let spiderClickCount = 0;
 let snakeGame = null;
 
-// Проверяем, есть ли поддержка hover (мышь)
-const isDesktop = window.matchMedia('(hover: hover)').matches;
-
-if (spiderBtn && isDesktop) {
+if (spiderBtn && !isMobile) {
     spiderBtn.addEventListener('click', () => {
         spiderClickCount++;
         if (spiderClickCount >= 5) {
@@ -480,39 +495,41 @@ function animateCounters() {
 }
 
 // ==========================================
-// 13. ИНДИКАТОР СЕКЦИЙ
+// 13. ИНДИКАТОР СЕКЦИЙ (только десктоп)
 // ==========================================
 const indicatorDots = document.querySelectorAll('.dot');
 
-function updateActiveDot(activeId) {
+if (!isMobile) {
+    function updateActiveDot(activeId) {
+        indicatorDots.forEach(dot => {
+            dot.classList.toggle('active', dot.dataset.target === `#${activeId}`);
+        });
+    }
+
+    const sectionIndicatorObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                updateActiveDot(entry.target.id);
+            }
+        });
+    }, { threshold: 0.6 });
+
+    sections.forEach(section => sectionIndicatorObserver.observe(section));
+
     indicatorDots.forEach(dot => {
-        dot.classList.toggle('active', dot.dataset.target === `#${activeId}`);
+        dot.addEventListener('click', () => {
+            const targetId = dot.dataset.target;
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                const snapContainer = document.querySelector('.snap-container');
+                snapContainer.scrollTo({
+                    top: targetElement.offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
     });
 }
-
-const sectionIndicatorObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            updateActiveDot(entry.target.id);
-        }
-    });
-}, { threshold: 0.6 });
-
-sections.forEach(section => sectionIndicatorObserver.observe(section));
-
-indicatorDots.forEach(dot => {
-    dot.addEventListener('click', () => {
-        const targetId = dot.dataset.target;
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-            const offsetTop = targetElement.offsetTop;
-            snapContainer.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
 
 // ==========================================
 // 14. КНОПКИ «ПОДРОБНЕЕ» В ТАЙМЛАЙНЕ
@@ -527,7 +544,7 @@ document.querySelectorAll('.details-btn').forEach(btn => {
 });
 
 // ==========================================
-// 15. ТОСТЫ (УВЕДОМЛЕНИЯ)
+// 15. ТОСТЫ
 // ==========================================
 function showToast(message) {
     const existingToast = document.querySelector('.toast');
