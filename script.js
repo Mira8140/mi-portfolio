@@ -1,7 +1,7 @@
 // ==========================================
-// ПРОВЕРКА ШИРИНЫ ЭКРАНА
+// ПРОВЕРКА ШИРИНЫ ЭКРАНА (динамическая)
 // ==========================================
-const isMobile = window.innerWidth <= 600;
+const isMobile = () => window.innerWidth <= 600;
 
 // ==========================================
 // 1. ПЕРЕКЛЮЧЕНИЕ ТЕМЫ (работает везде)
@@ -23,7 +23,7 @@ if (localStorage.getItem('theme') === 'dark') {
 // ==========================================
 const heroCard = document.getElementById('heroCard');
 
-if (heroCard && !isMobile) {
+if (heroCard && !isMobile()) {
     heroCard.addEventListener('mousemove', (e) => {
         const rect = heroCard.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -158,14 +158,13 @@ function updateActiveSection() {
     }
 }
 
-if (!isMobile) {
+if (!isMobile()) {
     const snapContainer = document.querySelector('.snap-container');
     snapContainer.addEventListener('scroll', () => {
         requestAnimationFrame(updateActiveSection);
     });
     window.addEventListener('DOMContentLoaded', updateActiveSection);
 } else {
-    // На мобильных все секции видимы сразу
     sections.forEach(section => section.classList.add('visible'));
 }
 
@@ -178,8 +177,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const targetId = this.getAttribute('href');
         const targetElement = document.querySelector(targetId);
         if (targetElement) {
-            if (isMobile) {
-                // На мобильных используем обычный скролл body
+            if (isMobile()) {
                 targetElement.scrollIntoView({ behavior: 'smooth' });
             } else {
                 const snapContainer = document.querySelector('.snap-container');
@@ -198,7 +196,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 const backToTopBtn = document.getElementById('backToTop');
 
 function toggleBackToTop() {
-    const scrollTop = isMobile ? window.scrollY : document.querySelector('.snap-container').scrollTop;
+    const scrollTop = isMobile() ? window.scrollY : document.querySelector('.snap-container').scrollTop;
     if (scrollTop > window.innerHeight * 0.5) {
         backToTopBtn.classList.add('visible');
     } else {
@@ -206,14 +204,14 @@ function toggleBackToTop() {
     }
 }
 
-if (isMobile) {
+if (isMobile()) {
     window.addEventListener('scroll', toggleBackToTop);
 } else {
     document.querySelector('.snap-container').addEventListener('scroll', toggleBackToTop);
 }
 
 backToTopBtn.addEventListener('click', () => {
-    if (isMobile) {
+    if (isMobile()) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
         document.querySelector('.snap-container').scrollTo({ top: 0, behavior: 'smooth' });
@@ -256,7 +254,7 @@ if (spiderBtn && spiderQuote) {
 let spiderClickCount = 0;
 let snakeGame = null;
 
-if (spiderBtn && !isMobile) {
+if (spiderBtn && !isMobile()) {
     spiderBtn.addEventListener('click', () => {
         spiderClickCount++;
         if (spiderClickCount >= 5) {
@@ -499,7 +497,7 @@ function animateCounters() {
 // ==========================================
 const indicatorDots = document.querySelectorAll('.dot');
 
-if (!isMobile) {
+if (!isMobile()) {
     function updateActiveDot(activeId) {
         indicatorDots.forEach(dot => {
             dot.classList.toggle('active', dot.dataset.target === `#${activeId}`);

@@ -1174,306 +1174,305 @@ footer {
 }
 
 /* =============================================
-   АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ
+   АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ (ИСПРАВЛЕНО)
 ============================================= */
 @media (max-width: 600px) {
-    /* Включаем обычную прокрутку */
+    html, body {
+        height: auto !important;
+        overflow: auto !important;
+        overflow-x: hidden !important;
+    }
+
     body {
-        overflow-y: auto;
-        height: auto;
+        position: relative;
     }
 
     .snap-container {
-        scroll-snap-type: none;
-        height: auto;
-        overflow-y: visible;
+        height: auto !important;
+        overflow: visible !important;
+        scroll-snap-type: none !important;
     }
 
     .section {
-        scroll-snap-align: none;
-        min-height: auto;
-        height: auto;
-        overflow-y: visible;
-        opacity: 1;
-        filter: none;
-        transform: none;
-        padding: 40px 15px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
+        scroll-snap-align: none !important;
+        min-height: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+        opacity: 1 !important;
+        filter: none !important;
+        transform: none !important;
+        padding: 40px 15px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
     }
 
     .section.visible {
-        opacity: 1;
-        filter: none;
-        transform: none;
+        opacity: 1 !important;
+        filter: none !important;
+        transform: none !important;
     }
 
     /* Hero */
     .hero-card {
-        width: 280px;
-        height: auto;
-        padding: 15px;
-        border-radius: 15px;
+        width: 280px !important;
+        height: auto !important;
+        padding: 15px !important;
+        border-radius: 15px !important;
     }
     .sticker {
-        top: 5px;
-        right: 5px;
-        font-size: 0.55rem;
-        padding: 3px 6px;
+        top: 5px !important;
+        right: 5px !important;
+        font-size: 0.55rem !important;
+        padding: 3px 6px !important;
     }
     .avatar {
-        width: 80px;
-        height: 80px;
-        border-width: 2px;
-        margin-bottom: 10px;
+        width: 80px !important;
+        height: 80px !important;
+        border-width: 2px !important;
+        margin-bottom: 10px !important;
     }
     .name {
-        font-size: 1.3rem;
+        font-size: 1.3rem !important;
     }
     .subtitle {
-        font-size: 0.7rem;
-        margin-bottom: 8px;
+        font-size: 0.7rem !important;
+        margin-bottom: 8px !important;
     }
     .extra-info {
-        font-size: 0.7rem;
-        margin-bottom: 8px;
+        font-size: 0.7rem !important;
+        margin-bottom: 8px !important;
     }
     .typing-text {
-        font-size: 0.75rem;
-        margin-bottom: 12px;
+        font-size: 0.75rem !important;
+        margin-bottom: 12px !important;
     }
     .hero-buttons {
-        gap: 6px;
+        gap: 6px !important;
     }
     .btn {
-        padding: 6px 12px;
-        font-size: 0.7rem;
+        padding: 6px 12px !important;
+        font-size: 0.7rem !important;
     }
 
     /* Таймлайн */
     .timeline {
-        padding-left: 10px;
+        padding-left: 10px !important;
     }
     .timeline::before {
-        left: 6px;
+        left: 6px !important;
     }
     .timeline-item {
-        margin-bottom: 20px;
+        margin-bottom: 20px !important;
     }
     .timeline-item::before {
-        left: -14px;
-        width: 8px;
-        height: 8px;
+        left: -14px !important;
+        width: 8px !important;
+        height: 8px !important;
     }
     .content {
-        padding: 8px 10px;
-        border-radius: 8px;
+        padding: 8px 10px !important;
+        border-radius: 8px !important;
     }
     .content h3 {
-        font-size: 0.9rem;
+        font-size: 0.9rem !important;
     }
     .content p {
-        font-size: 0.75rem;
+        font-size: 0.75rem !important;
     }
     .details-btn {
-        font-size: 0.75rem;
-        margin-top: 5px;
+        font-size: 0.75rem !important;
+        margin-top: 5px !important;
     }
     .details-content {
-        font-size: 0.75rem;
+        font-size: 0.75rem !important;
     }
 
     /* Любимое */
     .favorites-tabs {
-        gap: 6px;
-        margin-bottom: 15px;
+        gap: 6px !important;
+        margin-bottom: 15px !important;
     }
     .tab-btn {
-        padding: 5px 10px;
-        font-size: 0.7rem;
-        border-radius: 15px;
+        padding: 5px 10px !important;
+        font-size: 0.7rem !important;
+        border-radius: 15px !important;
     }
     .cards-grid {
-        gap: 10px;
-        padding: 5px 0;
+        gap: 10px !important;
+        padding: 5px 0 !important;
     }
     .fav-card {
-        width: 140px;
-        max-width: 140px;
-        padding: 6px;
-        border-radius: 10px;
+        width: 140px !important;
+        max-width: 140px !important;
+        padding: 6px !important;
+        border-radius: 10px !important;
     }
     .fav-card.music-card {
-        height: 170px;
+        height: 170px !important;
     }
     .fav-card img {
-        height: 90px;
-        border-radius: 6px;
-        margin-bottom: 5px;
+        height: 90px !important;
+        border-radius: 6px !important;
+        margin-bottom: 5px !important;
     }
     .song-info {
-        font-size: 0.65rem;
-        margin-bottom: 2px;
+        font-size: 0.65rem !important;
+        margin-bottom: 2px !important;
     }
     .listen-btn {
-        padding: 3px 8px;
-        font-size: 0.65rem;
-        gap: 3px;
-        border-radius: 12px;
+        padding: 3px 8px !important;
+        font-size: 0.65rem !important;
+        gap: 3px !important;
+        border-radius: 12px !important;
         margin-top: auto;
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        pointer-events: auto !important;
     }
 
     /* Навыки */
     .skills-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-        margin-bottom: 15px;
-        width: 100%;
-        max-width: 300px;
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+        margin-bottom: 15px !important;
+        width: 100% !important;
+        max-width: 300px !important;
     }
     .skill-card {
-        width: 100%;
-        max-width: 280px;
-        padding: 10px;
-        border-radius: 10px;
+        width: 100% !important;
+        max-width: 280px !important;
+        padding: 10px !important;
+        border-radius: 10px !important;
     }
     .skill-icon {
-        width: 24px;
-        height: 24px;
-        margin-bottom: 5px;
+        width: 24px !important;
+        height: 24px !important;
+        margin-bottom: 5px !important;
     }
     .skill-name {
-        font-size: 0.8rem;
-        margin-bottom: 5px;
+        font-size: 0.8rem !important;
+        margin-bottom: 5px !important;
     }
     .progress-bar {
-        height: 4px;
-        margin-bottom: 3px;
+        height: 4px !important;
+        margin-bottom: 3px !important;
     }
     .skill-level {
-        font-size: 0.65rem;
+        font-size: 0.65rem !important;
     }
 
     /* Контакты */
     .contacts-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-        width: 100%;
-        max-width: 300px;
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+        width: 100% !important;
+        max-width: 300px !important;
     }
     .contact-card {
-        padding: 10px;
-        border-radius: 10px;
-        gap: 3px;
+        padding: 10px !important;
+        border-radius: 10px !important;
+        gap: 3px !important;
     }
     .contact-icon {
-        width: 20px;
-        height: 20px;
-        margin-bottom: 2px;
+        width: 20px !important;
+        height: 20px !important;
+        margin-bottom: 2px !important;
     }
     .contact-name {
-        font-size: 0.8rem;
+        font-size: 0.8rem !important;
     }
     .contact-desc {
-        font-size: 0.65rem;
+        font-size: 0.65rem !important;
     }
 
     /* Кнопки и индикаторы */
     .theme-toggle,
     .back-to-top,
     .spider-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 1rem;
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 1rem !important;
     }
     .theme-toggle {
-        top: 8px;
-        right: 8px;
+        top: 8px !important;
+        right: 8px !important;
     }
     .back-to-top {
-        bottom: 15px;
-        right: 15px;
+        bottom: 15px !important;
+        right: 15px !important;
     }
     .spider-btn {
-        left: 10px;
-        bottom: 10px;
+        left: 10px !important;
+        bottom: 10px !important;
     }
     .spider-quote {
-        left: 50px;
-        font-size: 0.6rem;
-        padding: 4px 8px;
-        white-space: nowrap;
-        max-width: 150px;
-        top: -80px;
+        display: none !important;
     }
 
     .section-indicator {
-        right: 3px;
-        gap: 5px;
+        right: 3px !important;
+        gap: 5px !important;
     }
     .dot {
-        width: 6px;
-        height: 6px;
+        width: 6px !important;
+        height: 6px !important;
     }
 
     /* Модальные окна */
     .modal {
-        padding: 15px;
-        max-width: 260px;
-        border-radius: 12px;
+        padding: 15px !important;
+        max-width: 260px !important;
+        border-radius: 12px !important;
     }
     .modal-close {
-        top: 8px;
-        right: 10px;
-        font-size: 1rem;
+        top: 8px !important;
+        right: 10px !important;
+        font-size: 1rem !important;
     }
     #modalSongTitle {
-        font-size: 1rem;
-        margin-bottom: 15px;
+        font-size: 1rem !important;
+        margin-bottom: 15px !important;
     }
     .modal-links a {
-        padding: 8px 10px;
-        font-size: 0.75rem;
-        border-radius: 20px;
+        padding: 8px 10px !important;
+        font-size: 0.75rem !important;
+        border-radius: 20px !important;
     }
     .other-skills-modal {
-        max-width: 280px;
+        max-width: 280px !important;
     }
     .other-skill-card {
-        width: 110px;
-        padding: 8px;
+        width: 110px !important;
+        padding: 8px !important;
     }
     .other-skill-icon {
-        font-size: 1.5rem;
+        font-size: 1.5rem !important;
     }
     .other-skill-name {
-        font-size: 0.75rem;
+        font-size: 0.75rem !important;
     }
 
     /* Счётчики в модалке */
     .counter-item {
-        padding: 8px 10px;
-        min-width: 70px;
+        padding: 8px 10px !important;
+        min-width: 70px !important;
     }
     .counter {
-        font-size: 1.2rem;
+        font-size: 1.2rem !important;
     }
     .counter-plus {
-        font-size: 1rem;
+        font-size: 1rem !important;
     }
     .counter-label {
-        font-size: 0.6rem;
+        font-size: 0.6rem !important;
     }
 
     /* Тосты */
     .toast {
-        bottom: 10px;
-        font-size: 0.7rem;
-        padding: 8px 12px;
+        bottom: 10px !important;
+        font-size: 0.7rem !important;
+        padding: 8px 12px !important;
     }
 }
