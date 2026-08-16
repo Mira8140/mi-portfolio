@@ -4,7 +4,7 @@
 const isMobile = () => window.innerWidth <= 600;
 
 // ==========================================
-// 1. ПЕРЕКЛЮЧЕНИЕ ТЕМЫ (работает везде)
+// 1. ПЕРЕКЛЮЧЕНИЕ ТЕМЫ
 // ==========================================
 const themeToggle = document.getElementById('themeToggle');
 const body = document.body;
@@ -41,7 +41,7 @@ if (heroCard && !isMobile()) {
 }
 
 // ==========================================
-// 3. АНИМИРОВАННЫЙ ТЕКСТ (работает везде)
+// 3. АНИМИРОВАННЫЙ ТЕКСТ
 // ==========================================
 const typedElement = document.getElementById('typed');
 const phrases = [
@@ -79,7 +79,7 @@ function type() {
 type();
 
 // ==========================================
-// 4. ТАБЫ (работает везде)
+// 4. ТАБЫ
 // ==========================================
 const tabButtons = document.querySelectorAll('.tab-btn');
 const tabContents = document.querySelectorAll('.tab-content');
@@ -165,7 +165,13 @@ if (!isMobile()) {
     });
     window.addEventListener('DOMContentLoaded', updateActiveSection);
 } else {
+    // На мобильных все секции видимы сразу
     sections.forEach(section => section.classList.add('visible'));
+    // Заполняем прогресс-бары навыков
+    const skillsSection = document.getElementById('skills');
+    if (skillsSection) {
+        restartProgressBars(skillsSection);
+    }
 }
 
 // ==========================================
@@ -231,20 +237,27 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// 9. КНОПКА ЧЕЛОВЕКА-ПАУКА И ФРАЗА
+// 9. КНОПКА ЧЕЛОВЕКА-ПАУКА И ЦИТАТА
 // ==========================================
 const spiderBtn = document.getElementById('spiderBtn');
 const spiderQuote = document.getElementById('spiderQuote');
 
-if (spiderBtn && spiderQuote) {
+if (spiderBtn) {
     spiderBtn.addEventListener('click', () => {
         if (!body.classList.contains('dark')) {
             body.classList.add('dark');
             localStorage.setItem('theme', 'dark');
         }
-        spiderQuote.classList.remove('show');
-        void spiderQuote.offsetWidth;
-        spiderQuote.classList.add('show');
+
+        if (isMobile()) {
+            // На мобильных показываем тост
+            showToast('С великой силой приходит великая ответственность!');
+        } else if (spiderQuote) {
+            // На десктопе анимация
+            spiderQuote.classList.remove('show');
+            void spiderQuote.offsetWidth;
+            spiderQuote.classList.add('show');
+        }
     });
 }
 

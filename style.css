@@ -1174,17 +1174,13 @@ footer {
 }
 
 /* =============================================
-   АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ (ИСПРАВЛЕНО)
+   АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ (ФИНАЛ)
 ============================================= */
 @media (max-width: 600px) {
     html, body {
         height: auto !important;
         overflow: auto !important;
         overflow-x: hidden !important;
-    }
-
-    body {
-        position: relative;
     }
 
     .snap-container {
@@ -1289,7 +1285,7 @@ footer {
         font-size: 0.75rem !important;
     }
 
-    /* Любимое */
+    /* Любимое: карточки переносим в сетку */
     .favorites-tabs {
         gap: 6px !important;
         margin-bottom: 15px !important;
@@ -1300,17 +1296,23 @@ footer {
         border-radius: 15px !important;
     }
     .cards-grid {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        overflow-x: visible !important;
         gap: 10px !important;
         padding: 5px 0 !important;
+        justify-content: center !important;
     }
     .fav-card {
+        flex: 0 0 auto !important;
         width: 140px !important;
         max-width: 140px !important;
         padding: 6px !important;
         border-radius: 10px !important;
+        margin-bottom: 5px !important;
     }
     .fav-card.music-card {
-        height: 170px !important;
+        height: auto !important;
     }
     .fav-card img {
         height: 90px !important;
@@ -1410,14 +1412,8 @@ footer {
     .spider-quote {
         display: none !important;
     }
-
     .section-indicator {
-        right: 3px !important;
-        gap: 5px !important;
-    }
-    .dot {
-        width: 6px !important;
-        height: 6px !important;
+        display: none !important;
     }
 
     /* Модальные окна */
