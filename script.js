@@ -127,10 +127,8 @@ const sectionObserver = new IntersectionObserver((entries) => {
             const section = entry.target;
             section.classList.add('visible');
 
-            // Перезапускаем stagger-анимации
             restartStaggerAnimations(section);
 
-            // Если секция навыков, запускаем прогресс-бары
             if (section.id === 'skills') {
                 restartProgressBars(section);
             }
@@ -208,20 +206,15 @@ window.addEventListener('DOMContentLoaded', () => {
 const spiderBtn = document.getElementById('spiderBtn');
 const spiderQuote = document.getElementById('spiderQuote');
 
-if (spiderBtn) {
+if (spiderBtn && spiderQuote) {
     spiderBtn.addEventListener('click', () => {
         if (!body.classList.contains('dark')) {
             body.classList.add('dark');
             localStorage.setItem('theme', 'dark');
         }
-
-        if (isMobile()) {
-            showToast('С великой силой приходит великая ответственность!');
-        } else if (spiderQuote) {
-            spiderQuote.classList.remove('show');
-            void spiderQuote.offsetWidth;
-            spiderQuote.classList.add('show');
-        }
+        spiderQuote.classList.remove('show');
+        void spiderQuote.offsetWidth;
+        spiderQuote.classList.add('show');
     });
 }
 

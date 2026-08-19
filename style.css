@@ -34,6 +34,7 @@ body {
     overflow: hidden;
 }
 
+/* Улучшенная типографика */
 h1, h2, h3, .name {
     letter-spacing: -0.01em;
     line-height: 1.2;
@@ -50,7 +51,7 @@ h2 {
 }
 
 /* =============================================
-   КОНТЕЙНЕР СНАП-ПРОКРУТКИ (ДЕСКТОП)
+   КОНТЕЙНЕР СНАП-ПРОКРУТКИ (десктоп)
 ============================================= */
 .snap-container {
     height: 100vh;
@@ -59,7 +60,7 @@ h2 {
 }
 
 /* =============================================
-   СЕКЦИИ (ДЕСКТОП)
+   СЕКЦИИ (десктоп)
 ============================================= */
 .section {
     scroll-snap-align: start;
@@ -87,7 +88,31 @@ h2 {
 }
 
 /* =============================================
-   ФОНЫ ДЛЯ КАЖДОЙ СЕКЦИИ (С УЧЁТОМ ТЕМЫ)
+   ГРАДИЕНТНЫЕ ПЕРЕХОДЫ МЕЖДУ СЕКЦИЯМИ
+============================================= */
+.section::before,
+.section::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.section::before {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.35), transparent);
+}
+
+.section::after {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.35), transparent);
+}
+
+/* =============================================
+   ФОНЫ ДЛЯ КАЖДОЙ СЕКЦИИ (с учётом темы)
 ============================================= */
 body:not(.dark) #hero {
     background-image: 
@@ -201,7 +226,7 @@ body.dark footer.section {
 }
 
 /* =============================================
-   ИНДИКАТОР СЕКЦИЙ (ДЕСКТОП)
+   ИНДИКАТОР СЕКЦИЙ (десктоп)
 ============================================= */
 .section-indicator {
     position: fixed;
@@ -685,7 +710,7 @@ body.dark .skill-card-other .skill-name {
 }
 
 /* =============================================
-   СЧЁТЧИКИ (В МОДАЛКЕ)
+   СЧЁТЧИКИ (в модалке)
 ============================================= */
 .counters {
     display: flex;
@@ -1190,15 +1215,15 @@ footer {
 
     .section {
         scroll-snap-align: none !important;
-        min-height: auto !important;
+        min-height: 100vh !important;
         height: auto !important;
-        overflow: visible !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
         padding: 30px 15px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        justify-content: flex-start !important;
-        /* НЕ трогаем opacity, filter, transform – они остаются для анимации */
+        justify-content: center !important;
     }
 
     /* Hero */
@@ -1276,7 +1301,7 @@ footer {
         font-size: 0.75rem !important;
     }
 
-    /* Любимое: карточки переносятся */
+    /* Любимое */
     .favorites-tabs {
         gap: 6px !important;
         margin-bottom: 15px !important;
@@ -1400,9 +1425,17 @@ footer {
         left: 10px !important;
         bottom: 10px !important;
     }
+
+    /* Цитата паука — адаптивная */
     .spider-quote {
-        display: none !important;
+        left: 60px !important;
+        top: -100px !important;
+        font-size: 0.8rem !important;
+        padding: 8px 12px !important;
+        max-width: 200px !important;
+        white-space: nowrap;
     }
+
     .section-indicator {
         display: none !important;
     }
