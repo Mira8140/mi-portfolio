@@ -1112,7 +1112,6 @@ footer {
     z-index: 10;
 }
 
-/* Контейнеры экранов */
 .snake-screen {
     display: none;
     flex-direction: column;
@@ -1537,18 +1536,18 @@ footer {
         bottom: 20px !important;
     }
 
-    /* Цитата паука — мобильная адаптация */
+    /* Цитата паука — мобильная адаптация (без !important) */
     .spider-quote {
-        left: 40px !important;
-        top: -80px !important;
-        font-size: 0.75rem !important;
-        padding: 10px 14px !important;
-        max-width: 200px !important;
-        white-space: normal !important;
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important;
-        border: 1px solid #e23636 !important;
-        box-sizing: border-box !important;
+        top: 10px;
+        left: 50px;
+        font-size: 0.75rem;
+        padding: 10px 14px;
+        max-width: 200px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        border: 1px solid #e23636;
+        box-sizing: border-box;
     }
 
     .section-indicator {

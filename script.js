@@ -215,7 +215,7 @@ if (spiderBtn && spiderQuote) {
             if (!isMobile()) {
                 openSnakeGame();
             }
-            lastClickTime = 0; // сброс
+            lastClickTime = 0;
         } else {
             // Одиночный клик
             if (!body.classList.contains('dark')) {
@@ -259,7 +259,6 @@ function showSnakeScreen(screenId) {
 function openSnakeGame() {
     snakeModal.classList.add('active');
     showSnakeScreen('snakeLoading');
-    // Имитация загрузки
     setTimeout(() => {
         showSnakeScreen('snakeIntro');
     }, 1200);
@@ -281,7 +280,6 @@ function showGameOver(score) {
     if (score > snakeRecord) {
         snakeRecord = score;
         localStorage.setItem('snakeRecord', snakeRecord);
-        // Можно показать "Новый рекорд!"
     }
 }
 
@@ -298,7 +296,6 @@ snakeRestartBtn.addEventListener('click', startSnakeGame);
 snakeExitBtn.addEventListener('click', exitSnakeGame);
 snakeClose.addEventListener('click', exitSnakeGame);
 
-// Звуки через Web Audio
 function playBeep(freq, duration, type = 'sine') {
     try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -311,7 +308,6 @@ function playBeep(freq, duration, type = 'sine') {
         gain.connect(ctx.destination);
         osc.start();
         osc.stop(ctx.currentTime + duration);
-        // Для коротких звуков
         setTimeout(() => ctx.close(), duration * 1000 + 50);
     } catch (e) {
         console.error('Audio error:', e);
@@ -410,7 +406,7 @@ class SnakeGame {
         ) {
             this.over = true;
             this.stop();
-            playBeep(150, 0.3, 'sawtooth'); // звук столкновения
+            playBeep(150, 0.3, 'sawtooth');
             showGameOver(this.score);
             return;
         }
@@ -420,7 +416,7 @@ class SnakeGame {
         if (head.x === this.food.x && head.y === this.food.y) {
             this.score++;
             this.scoreSpan.textContent = this.score;
-            playBeep(800, 0.1); // звук еды
+            playBeep(800, 0.1);
             this.placeFood();
         } else {
             this.snake.pop();
@@ -444,7 +440,6 @@ class SnakeGame {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        // Сетка
         this.ctx.strokeStyle = '#333';
         this.ctx.lineWidth = 0.5;
         for (let i = 0; i <= this.gridSize; i++) {
@@ -457,12 +452,10 @@ class SnakeGame {
             this.ctx.lineTo(this.canvas.width, i * this.cellSize);
             this.ctx.stroke();
         }
-        // Змея
         this.ctx.fillStyle = '#1db954';
-        this.snake.forEach((seg, index) => {
+        this.snake.forEach((seg) => {
             this.ctx.fillRect(seg.x * this.cellSize, seg.y * this.cellSize, this.cellSize - 1, this.cellSize - 1);
         });
-        // Еда
         this.ctx.fillStyle = '#ff3b30';
         this.ctx.beginPath();
         this.ctx.arc(
@@ -482,6 +475,35 @@ class SnakeGame {
 const sectionNavBtn = document.getElementById('sectionNavBtn');
 const sectionProgressBar = document.getElementById('sectionProgressBar');
 let activeSection = null;
+let isAnimating = false;
+
+function getCurrentSection() {
+    const viewportHeight = window.innerHeight;
+    let current = null;
+    sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= viewportHeight/2 && rect.bottom > viewportHeight/2) {
+            current = section;
+        }
+    });
+    return current;
+}
+
+function lockScrollToSection(section) {
+    const sectionTop = section.offsetTop;
+    const sectionBottom = sectionTop + section.offsetHeight;
+    const maxScroll = sectionBottom - window.innerHeight;
+    const currentScroll = window.scrollY;
+
+    if (currentScroll < sectionTop) {
+        window.scrollTo({ top: sectionTop, behavior: 'auto' });
+        return true;
+    } else if (currentScroll > maxScroll && maxScroll > 0) {
+        window.scrollTo({ top: maxScroll, behavior: 'auto' });
+        return true;
+    }
+    return false;
+}
 
 function updateMobileNavigation() {
     if (!isMobile()) {
@@ -490,40 +512,38 @@ function updateMobileNavigation() {
         return;
     }
 
-    const scrollY = window.scrollY;
-    const viewportHeight = window.innerHeight;
+    const section = getCurrentSection();
+    if (!section) return;
 
-    // Находим текущую секцию
-    let currentSection = null;
-    sections.forEach(section => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= viewportHeight/2 && rect.bottom > viewportHeight/2) {
-            currentSection = section;
-        }
-    });
+    // Блокируем выход за пределы секции (если не анимация)
+    if (!isAnimating) {
+        lockScrollToSection(section);
+    }
 
-    if (!currentSection) return;
-
-    const sectionTop = currentSection.offsetTop;
-    const sectionHeight = currentSection.offsetHeight;
-    const scrollableHeight = sectionHeight - viewportHeight;
-    const progress = Math.min(1, Math.max(0, (scrollY - sectionTop) / scrollableHeight));
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.offsetHeight;
+    const scrollableHeight = sectionHeight - window.innerHeight;
+    const progress = scrollableHeight > 0 ? Math.min(1, Math.max(0, (window.scrollY - sectionTop) / scrollableHeight)) : 0;
     sectionProgressBar.style.width = (progress * 100) + '%';
 
-    const isAtBottom = scrollY + viewportHeight >= sectionTop + sectionHeight - 5;
-    const isAtTop = scrollY <= sectionTop + 5;
+    const isAtBottom = scrollableHeight > 0 && window.scrollY + window.innerHeight >= sectionTop + sectionHeight - 5;
+    const isAtTop = window.scrollY <= sectionTop + 5;
 
-    if (isAtBottom && currentSection.nextElementSibling && currentSection.nextElementSibling.classList.contains('section')) {
+    if (isAtBottom && section.nextElementSibling && section.nextElementSibling.classList.contains('section')) {
         sectionNavBtn.textContent = '↓';
         sectionNavBtn.classList.add('visible');
         sectionNavBtn.onclick = () => {
-            currentSection.nextElementSibling.scrollIntoView({ behavior: 'smooth' });
+            isAnimating = true;
+            section.nextElementSibling.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => { isAnimating = false; }, 1000);
         };
-    } else if (isAtTop && currentSection.previousElementSibling && currentSection.previousElementSibling.classList.contains('section')) {
+    } else if (isAtTop && section.previousElementSibling && section.previousElementSibling.classList.contains('section')) {
         sectionNavBtn.textContent = '↑';
         sectionNavBtn.classList.add('visible');
         sectionNavBtn.onclick = () => {
-            currentSection.previousElementSibling.scrollIntoView({ behavior: 'smooth' });
+            isAnimating = true;
+            section.previousElementSibling.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => { isAnimating = false; }, 1000);
         };
     } else {
         sectionNavBtn.classList.remove('visible');
@@ -683,7 +703,7 @@ document.querySelectorAll('.details-btn').forEach(btn => {
 });
 
 // ==========================================
-// 16. ТОСТЫ (уведомления)
+// 16. ТОСТЫ
 // ==========================================
 function showToast(message) {
     const existingToast = document.querySelector('.toast');
