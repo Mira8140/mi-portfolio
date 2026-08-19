@@ -1,10 +1,10 @@
 // ==========================================
-// ПРОВЕРКА ШИРИНЫ ЭКРАНА
+// ПРОВЕРКА ШИРИНЫ ЭКРАНА (динамическая)
 // ==========================================
 const isMobile = () => window.innerWidth <= 600;
 
 // ==========================================
-// 1. ПЕРЕКЛЮЧЕНИЕ ТЕМЫ
+// 1. ПЕРЕКЛЮЧЕНИЕ ТЕМЫ (работает везде)
 // ==========================================
 const themeToggle = document.getElementById('themeToggle');
 const body = document.body;
@@ -41,7 +41,7 @@ if (heroCard && !isMobile()) {
 }
 
 // ==========================================
-// 3. АНИМИРОВАННЫЙ ТЕКСТ
+// 3. АНИМИРОВАННЫЙ ТЕКСТ В HERO
 // ==========================================
 const typedElement = document.getElementById('typed');
 const phrases = [
@@ -79,7 +79,7 @@ function type() {
 type();
 
 // ==========================================
-// 4. ТАБЫ
+// 4. ТАБЫ В СЕКЦИИ «ЛЮБИМОЕ»
 // ==========================================
 const tabButtons = document.querySelectorAll('.tab-btn');
 const tabContents = document.querySelectorAll('.tab-content');
@@ -120,7 +120,6 @@ function restartProgressBars(section) {
     });
 }
 
-// IntersectionObserver для секций
 const sectionObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -201,7 +200,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// 9. КНОПКА ЧЕЛОВЕКА-ПАУКА
+// 9. КНОПКА ЧЕЛОВЕКА-ПАУКА И ФРАЗА ДЯДИ БЕНА
 // ==========================================
 const spiderBtn = document.getElementById('spiderBtn');
 const spiderQuote = document.getElementById('spiderQuote');
@@ -219,7 +218,7 @@ if (spiderBtn && spiderQuote) {
 }
 
 // ==========================================
-// 10. СЕКРЕТНАЯ ПАСХАЛКА (только десктоп)
+// 10. СЕКРЕТНАЯ ПАСХАЛКА «ЗМЕЙКА» (только десктоп)
 // ==========================================
 let spiderClickCount = 0;
 let snakeGame = null;
@@ -512,7 +511,7 @@ document.querySelectorAll('.details-btn').forEach(btn => {
 });
 
 // ==========================================
-// 15. ТОСТЫ
+// 15. ТОСТЫ (УВЕДОМЛЕНИЯ)
 // ==========================================
 function showToast(message) {
     const existingToast = document.querySelector('.toast');
