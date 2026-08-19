@@ -8,6 +8,7 @@
     --border: #cccccc;
     --accent: #2c2c2c;
     --shadow: 0 20px 40px rgba(0,0,0,0.1);
+    --vignette: rgba(255,255,255,0.45); /* виньетка для светлой темы */
 }
 
 body.dark {
@@ -17,6 +18,7 @@ body.dark {
     --border: #333333;
     --accent: #ffffff;
     --shadow: 0 20px 40px rgba(255,255,255,0.05);
+    --vignette: rgba(0,0,0,0.65); /* виньетка для тёмной темы */
 }
 
 * {
@@ -79,6 +81,7 @@ h2 {
     background-position: center;
     position: relative;
     overflow: hidden;
+    box-shadow: inset 0 0 120px var(--vignette); /* виньетка */
 }
 
 .section.visible {
@@ -103,12 +106,12 @@ h2 {
 
 .section::before {
     top: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.35), transparent);
+    background: linear-gradient(to bottom, var(--vignette), transparent);
 }
 
 .section::after {
     bottom: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.35), transparent);
+    background: linear-gradient(to top, var(--vignette), transparent);
 }
 
 /* =============================================
@@ -1301,7 +1304,7 @@ footer {
         font-size: 0.75rem !important;
     }
 
-    /* Любимое */
+    /* Любимое: карточки переносятся */
     .favorites-tabs {
         gap: 6px !important;
         margin-bottom: 15px !important;
@@ -1409,31 +1412,32 @@ footer {
     .theme-toggle,
     .back-to-top,
     .spider-btn {
-        width: 36px !important;
-        height: 36px !important;
-        font-size: 1rem !important;
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 1.4rem !important;
     }
     .theme-toggle {
-        top: 8px !important;
-        right: 8px !important;
+        top: 16px !important;
+        right: 16px !important;
     }
     .back-to-top {
-        bottom: 15px !important;
-        right: 15px !important;
+        bottom: 20px !important;
+        right: 20px !important;
     }
     .spider-btn {
-        left: 10px !important;
-        bottom: 10px !important;
+        left: 16px !important;
+        bottom: 20px !important;
     }
 
-    /* Цитата паука — адаптивная */
+    /* Цитата паука — адаптирована */
     .spider-quote {
         left: 60px !important;
-        top: -100px !important;
+        top: -80px !important;
         font-size: 0.8rem !important;
         padding: 8px 12px !important;
         max-width: 200px !important;
-        white-space: nowrap;
+        white-space: nowrap !important;
+        border: 1px solid #e23636 !important;
     }
 
     .section-indicator {
