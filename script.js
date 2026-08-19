@@ -1,5 +1,5 @@
 // ==========================================
-// ПРОВЕРКА ШИРИНЫ ЭКРАНА (динамическая)
+// ПРОВЕРКА ШИРИНЫ ЭКРАНА
 // ==========================================
 const isMobile = () => window.innerWidth <= 600;
 
@@ -95,10 +95,9 @@ tabButtons.forEach(btn => {
 });
 
 // ==========================================
-// 5. УПРАВЛЕНИЕ СЕКЦИЯМИ (только десктоп)
+// 5. ПОЯВЛЕНИЕ СЕКЦИЙ ПРИ СКРОЛЛЕ
 // ==========================================
 const sections = document.querySelectorAll('.section');
-let activeSectionId = null;
 
 function restartStaggerAnimations(section) {
     const staggerItems = section.querySelectorAll('.stagger-item');
@@ -121,58 +120,25 @@ function restartProgressBars(section) {
     });
 }
 
-function updateActiveSection() {
-    const snapContainer = document.querySelector('.snap-container');
-    const scrollTop = snapContainer.scrollTop;
-    const containerHeight = snapContainer.clientHeight;
+// IntersectionObserver для секций
+const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const section = entry.target;
+            section.classList.add('visible');
 
-    let newActiveSection = null;
+            // Перезапускаем stagger-анимации
+            restartStaggerAnimations(section);
 
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionBottom = sectionTop + section.offsetHeight;
-
-        if (scrollTop >= sectionTop - containerHeight * 0.5 && scrollTop < sectionBottom - containerHeight * 0.5) {
-            newActiveSection = section;
+            // Если секция навыков, запускаем прогресс-бары
+            if (section.id === 'skills') {
+                restartProgressBars(section);
+            }
         }
     });
+}, { threshold: 0.2 });
 
-    if (!newActiveSection) {
-        newActiveSection = sections[sections.length - 1];
-    }
-
-    if (newActiveSection && newActiveSection.id !== activeSectionId) {
-        activeSectionId = newActiveSection.id;
-
-        sections.forEach(section => {
-            section.classList.remove('visible');
-        });
-
-        newActiveSection.classList.add('visible');
-
-        restartStaggerAnimations(newActiveSection);
-
-        if (newActiveSection.id === 'skills') {
-            restartProgressBars(newActiveSection);
-        }
-    }
-}
-
-if (!isMobile()) {
-    const snapContainer = document.querySelector('.snap-container');
-    snapContainer.addEventListener('scroll', () => {
-        requestAnimationFrame(updateActiveSection);
-    });
-    window.addEventListener('DOMContentLoaded', updateActiveSection);
-} else {
-    // На мобильных все секции видимы сразу
-    sections.forEach(section => section.classList.add('visible'));
-    // Заполняем прогресс-бары навыков
-    const skillsSection = document.getElementById('skills');
-    if (skillsSection) {
-        restartProgressBars(skillsSection);
-    }
-}
+sections.forEach(section => sectionObserver.observe(section));
 
 // ==========================================
 // 6. ПЛАВНЫЙ СКРОЛЛ ПО ЯКОРЯМ
@@ -237,7 +203,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// 9. КНОПКА ЧЕЛОВЕКА-ПАУКА И ЦИТАТА
+// 9. КНОПКА ЧЕЛОВЕКА-ПАУКА
 // ==========================================
 const spiderBtn = document.getElementById('spiderBtn');
 const spiderQuote = document.getElementById('spiderQuote');
@@ -250,10 +216,8 @@ if (spiderBtn) {
         }
 
         if (isMobile()) {
-            // На мобильных показываем тост
             showToast('С великой силой приходит великая ответственность!');
         } else if (spiderQuote) {
-            // На десктопе анимация
             spiderQuote.classList.remove('show');
             void spiderQuote.offsetWidth;
             spiderQuote.classList.add('show');
