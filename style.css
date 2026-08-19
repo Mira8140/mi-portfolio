@@ -873,9 +873,10 @@ footer {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* ==== ИЗМЕНЕННЫЙ БЛОК ЦИТАТЫ ==== */
 .spider-quote {
     position: fixed;
-    top: -120px;
+    top: 20px;
     left: 80px;
     background: #1a1a1a;
     color: #fff;
@@ -886,6 +887,7 @@ footer {
     box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 0 15px rgba(226, 54, 54, 0.6);
     border: 1px solid #e23636;
     opacity: 0;
+    transform: translateY(-120px);
     pointer-events: none;
     z-index: 120;
     white-space: nowrap;
@@ -906,13 +908,13 @@ footer {
 }
 
 @keyframes spiderDrop {
-    0% { top: -120px; opacity: 0; }
-    20% { top: 20px; opacity: 1; }
-    40% { top: 20px; transform: rotate(4deg); }
-    55% { top: 20px; transform: rotate(-4deg); }
-    70% { top: 20px; transform: rotate(3deg); }
-    85% { top: 20px; opacity: 1; }
-    100% { top: -120px; opacity: 0; }
+    0% { transform: translateY(-120px); opacity: 0; }
+    20% { transform: translateY(0); opacity: 1; }
+    40% { transform: rotate(4deg); }
+    55% { transform: rotate(-4deg); }
+    70% { transform: rotate(3deg); }
+    85% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-120px); opacity: 0; }
 }
 
 .spider-quote.show {
@@ -1428,19 +1430,20 @@ footer {
         bottom: 20px !important;
     }
 
-    /* Цитата паука — адаптирована, без !important для top и left */
- .spider-quote {
-    left: 40px !important;
-    top: -80px !important;
-    font-size: 0.75rem !important;
-    padding: 10px 14px !important;
-    max-width: 200px !important;
-    white-space: normal !important;
-    word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
-    border: 1px solid #e23636 !important;
-    box-sizing: border-box !important;
-}
+    /* Цитата паука — мобильная адаптация */
+    .spider-quote {
+        top: 10px;
+        left: 50px;
+        font-size: 0.75rem;
+        padding: 10px 14px;
+        max-width: 200px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        border: 1px solid #e23636;
+        box-sizing: border-box;
+    }
+
     .section-indicator {
         display: none !important;
     }
