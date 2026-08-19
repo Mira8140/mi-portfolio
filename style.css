@@ -1430,16 +1430,16 @@ footer {
 
     /* Цитата паука — адаптирована, без !important для top и left */
  .spider-quote {
-    left: 40px;
-    top: -80px;
-    font-size: 0.75rem;
-    padding: 10px 14px;
-    max-width: 200px;
-    white-space: normal;          /* разрешаем перенос */
-    word-wrap: break-word;       /* перенос длинных слов */
-    overflow-wrap: break-word;
-    border: 1px solid #e23636;
-    box-sizing: border-box;
+    left: 40px !important;
+    top: -80px !important;
+    font-size: 0.75rem !important;
+    padding: 10px 14px !important;
+    max-width: 200px !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    border: 1px solid #e23636 !important;
+    box-sizing: border-box !important;
 }
     .section-indicator {
         display: none !important;
