@@ -1430,15 +1430,15 @@ footer {
 
     /* Цитата паука — адаптирована, без !important для top и left */
     .spider-quote {
-        left: 60px;
-        top: -80px;
-        font-size: 0.8rem;
-        padding: 8px 12px;
-        max-width: 200px;
-        white-space: nowrap;
-        border: 1px solid #e23636;
-    }
-
+    left: 60px;
+    top: -80px;
+    font-size: 0.8rem;
+    padding: 10px 14px;
+    max-width: 220px;
+    white-space: normal;          /* разрешаем перенос текста */
+    word-wrap: break-word;       /* длинные слова переносим */
+    border: 1px solid #e23636;
+}
     .section-indicator {
         display: none !important;
     }
