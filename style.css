@@ -8,7 +8,7 @@
     --border: #cccccc;
     --accent: #2c2c2c;
     --shadow: 0 20px 40px rgba(0,0,0,0.1);
-    --vignette: rgba(255,255,255,0.45); /* виньетка для светлой темы */
+    --vignette: rgba(255,255,255,0.45);
 }
 
 body.dark {
@@ -18,7 +18,7 @@ body.dark {
     --border: #333333;
     --accent: #ffffff;
     --shadow: 0 20px 40px rgba(255,255,255,0.05);
-    --vignette: rgba(0,0,0,0.65); /* виньетка для тёмной темы */
+    --vignette: rgba(0,0,0,0.65);
 }
 
 * {
@@ -36,7 +36,6 @@ body {
     overflow: hidden;
 }
 
-/* Улучшенная типографика */
 h1, h2, h3, .name {
     letter-spacing: -0.01em;
     line-height: 1.2;
@@ -81,7 +80,7 @@ h2 {
     background-position: center;
     position: relative;
     overflow: hidden;
-    box-shadow: inset 0 0 120px var(--vignette); /* виньетка */
+    box-shadow: inset 0 0 120px var(--vignette);
 }
 
 .section.visible {
@@ -1429,15 +1428,15 @@ footer {
         bottom: 20px !important;
     }
 
-    /* Цитата паука — адаптирована */
+    /* Цитата паука — адаптирована, без !important для top и left */
     .spider-quote {
-        left: 60px !important;
-        top: -80px !important;
-        font-size: 0.8rem !important;
-        padding: 8px 12px !important;
-        max-width: 200px !important;
-        white-space: nowrap !important;
-        border: 1px solid #e23636 !important;
+        left: 60px;
+        top: -80px;
+        font-size: 0.8rem;
+        padding: 8px 12px;
+        max-width: 200px;
+        white-space: nowrap;
+        border: 1px solid #e23636;
     }
 
     .section-indicator {

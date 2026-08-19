@@ -4,7 +4,7 @@
 const isMobile = () => window.innerWidth <= 600;
 
 // ==========================================
-// 1. ПЕРЕКЛЮЧЕНИЕ ТЕМЫ (работает везде)
+// 1. ПЕРЕКЛЮЧЕНИЕ ТЕМЫ
 // ==========================================
 const themeToggle = document.getElementById('themeToggle');
 const body = document.body;
@@ -511,7 +511,7 @@ document.querySelectorAll('.details-btn').forEach(btn => {
 });
 
 // ==========================================
-// 15. ТОСТЫ (УВЕДОМЛЕНИЯ)
+// 15. ТОСТЫ
 // ==========================================
 function showToast(message) {
     const existingToast = document.querySelector('.toast');
