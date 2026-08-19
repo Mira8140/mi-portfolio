@@ -205,53 +205,117 @@ window.addEventListener('DOMContentLoaded', () => {
 const spiderBtn = document.getElementById('spiderBtn');
 const spiderQuote = document.getElementById('spiderQuote');
 
+let lastClickTime = 0;
+
 if (spiderBtn && spiderQuote) {
     spiderBtn.addEventListener('click', () => {
-        if (!body.classList.contains('dark')) {
-            body.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
+        const now = Date.now();
+        if (now - lastClickTime < 300) {
+            // Двойной клик
+            if (!isMobile()) {
+                openSnakeGame();
+            }
+            lastClickTime = 0; // сброс
+        } else {
+            // Одиночный клик
+            if (!body.classList.contains('dark')) {
+                body.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            spiderQuote.classList.remove('show');
+            void spiderQuote.offsetWidth;
+            spiderQuote.classList.add('show');
         }
-        spiderQuote.classList.remove('show');
-        void spiderQuote.offsetWidth;
-        spiderQuote.classList.add('show');
+        lastClickTime = now;
     });
 }
 
 // ==========================================
-// 10. СЕКРЕТНАЯ ПАСХАЛКА «ЗМЕЙКА» (только десктоп)
+// 10. ПАСХАЛКА «ЗМЕЙКА» (ТОЛЬКО ДЕСКТОП)
 // ==========================================
-let spiderClickCount = 0;
-let snakeGame = null;
+const snakeModal = document.getElementById('snakeModal');
+const snakeLoading = document.getElementById('snakeLoading');
+const snakeIntro = document.getElementById('snakeIntro');
+const snakeGameScreen = document.getElementById('snakeGame');
+const snakeGameOverScreen = document.getElementById('snakeGameOver');
+const snakeStartBtn = document.getElementById('snakeStartBtn');
+const snakeRestartBtn = document.getElementById('snakeRestartBtn');
+const snakeExitBtn = document.getElementById('snakeExitBtn');
+const snakeClose = document.getElementById('snakeClose');
+const snakeCanvas = document.getElementById('snakeCanvas');
+const snakeScoreSpan = document.getElementById('snakeScore');
+const snakeFinalScoreSpan = document.getElementById('snakeFinalScore');
 
-if (spiderBtn && !isMobile()) {
-    spiderBtn.addEventListener('click', () => {
-        spiderClickCount++;
-        if (spiderClickCount >= 5) {
-            spiderClickCount = 0;
-            openSnakeGame();
-        }
+let snakeGame = null;
+let snakeRecord = parseInt(localStorage.getItem('snakeRecord')) || 0;
+
+function showSnakeScreen(screenId) {
+    [snakeLoading, snakeIntro, snakeGameScreen, snakeGameOverScreen].forEach(screen => {
+        screen.classList.remove('active');
     });
+    document.getElementById(screenId).classList.add('active');
 }
 
 function openSnakeGame() {
-    const modal = document.getElementById('snakeModal');
-    const canvas = document.getElementById('snakeCanvas');
-    const scoreSpan = document.getElementById('snakeScore');
-    const closeBtn = document.getElementById('snakeClose');
+    snakeModal.classList.add('active');
+    showSnakeScreen('snakeLoading');
+    // Имитация загрузки
+    setTimeout(() => {
+        showSnakeScreen('snakeIntro');
+    }, 1200);
+}
 
-    modal.classList.add('active');
-    closeBtn.onclick = () => {
-        modal.classList.remove('active');
-        if (snakeGame) {
-            snakeGame.stop();
-            snakeGame = null;
-        }
-    };
-
-    if (!snakeGame) {
-        snakeGame = new SnakeGame(canvas, scoreSpan);
+function startSnakeGame() {
+    if (snakeGame) {
+        snakeGame.stop();
+        snakeGame = null;
     }
+    showSnakeScreen('snakeGame');
+    snakeGame = new SnakeGame(snakeCanvas, snakeScoreSpan);
     snakeGame.start();
+}
+
+function showGameOver(score) {
+    showSnakeScreen('snakeGameOver');
+    snakeFinalScoreSpan.textContent = score;
+    if (score > snakeRecord) {
+        snakeRecord = score;
+        localStorage.setItem('snakeRecord', snakeRecord);
+        // Можно показать "Новый рекорд!"
+    }
+}
+
+function exitSnakeGame() {
+    if (snakeGame) {
+        snakeGame.stop();
+        snakeGame = null;
+    }
+    snakeModal.classList.remove('active');
+}
+
+snakeStartBtn.addEventListener('click', startSnakeGame);
+snakeRestartBtn.addEventListener('click', startSnakeGame);
+snakeExitBtn.addEventListener('click', exitSnakeGame);
+snakeClose.addEventListener('click', exitSnakeGame);
+
+// Звуки через Web Audio
+function playBeep(freq, duration, type = 'sine') {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.value = 0.15;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+        // Для коротких звуков
+        setTimeout(() => ctx.close(), duration * 1000 + 50);
+    } catch (e) {
+        console.error('Audio error:', e);
+    }
 }
 
 class SnakeGame {
@@ -269,8 +333,10 @@ class SnakeGame {
         this.gameInterval = null;
         this.speed = 150;
         this.over = false;
+        this.paused = false;
         this.boundKeyHandler = this.handleKey.bind(this);
         document.addEventListener('keydown', this.boundKeyHandler);
+        this.draw();
     }
 
     handleKey(e) {
@@ -278,25 +344,43 @@ class SnakeGame {
             'ArrowUp': 'up',
             'ArrowDown': 'down',
             'ArrowLeft': 'left',
-            'ArrowRight': 'right'
+            'ArrowRight': 'right',
+            'Space': 'space'
         };
         if (keyMap[e.key]) {
             e.preventDefault();
-            const newDir = keyMap[e.key];
-            if (
-                (newDir === 'up' && this.direction !== 'down') ||
-                (newDir === 'down' && this.direction !== 'up') ||
-                (newDir === 'left' && this.direction !== 'right') ||
-                (newDir === 'right' && this.direction !== 'left')
-            ) {
-                this.nextDirection = newDir;
+            const key = keyMap[e.key];
+            if (key === 'space') {
+                this.togglePause();
+                return;
             }
+            if (this.paused || this.over) return;
+            if (
+                (key === 'up' && this.direction !== 'down') ||
+                (key === 'down' && this.direction !== 'up') ||
+                (key === 'left' && this.direction !== 'right') ||
+                (key === 'right' && this.direction !== 'left')
+            ) {
+                this.nextDirection = key;
+            }
+        }
+    }
+
+    togglePause() {
+        if (this.over) return;
+        this.paused = !this.paused;
+        if (this.paused) {
+            clearInterval(this.gameInterval);
+            this.gameInterval = null;
+        } else {
+            this.start();
         }
     }
 
     start() {
         if (this.gameInterval) clearInterval(this.gameInterval);
         this.gameInterval = setInterval(() => this.update(), this.speed);
+        this.paused = false;
     }
 
     stop() {
@@ -308,7 +392,7 @@ class SnakeGame {
     }
 
     update() {
-        if (this.over) return;
+        if (this.paused || this.over) return;
 
         this.direction = this.nextDirection;
         const head = {...this.snake[0]};
@@ -326,7 +410,8 @@ class SnakeGame {
         ) {
             this.over = true;
             this.stop();
-            alert('Игра окончена! Счёт: ' + this.score);
+            playBeep(150, 0.3, 'sawtooth'); // звук столкновения
+            showGameOver(this.score);
             return;
         }
 
@@ -335,6 +420,7 @@ class SnakeGame {
         if (head.x === this.food.x && head.y === this.food.y) {
             this.score++;
             this.scoreSpan.textContent = this.score;
+            playBeep(800, 0.1); // звук еды
             this.placeFood();
         } else {
             this.snake.pop();
@@ -358,25 +444,111 @@ class SnakeGame {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        // Сетка
+        this.ctx.strokeStyle = '#333';
+        this.ctx.lineWidth = 0.5;
+        for (let i = 0; i <= this.gridSize; i++) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(i * this.cellSize, 0);
+            this.ctx.lineTo(i * this.cellSize, this.canvas.height);
+            this.ctx.stroke();
+            this.ctx.beginPath();
+            this.ctx.moveTo(0, i * this.cellSize);
+            this.ctx.lineTo(this.canvas.width, i * this.cellSize);
+            this.ctx.stroke();
+        }
+        // Змея
         this.ctx.fillStyle = '#1db954';
-        this.snake.forEach((seg) => {
+        this.snake.forEach((seg, index) => {
             this.ctx.fillRect(seg.x * this.cellSize, seg.y * this.cellSize, this.cellSize - 1, this.cellSize - 1);
         });
+        // Еда
         this.ctx.fillStyle = '#ff3b30';
-        this.ctx.fillRect(this.food.x * this.cellSize, this.food.y * this.cellSize, this.cellSize - 1, this.cellSize - 1);
+        this.ctx.beginPath();
+        this.ctx.arc(
+            this.food.x * this.cellSize + this.cellSize/2,
+            this.food.y * this.cellSize + this.cellSize/2,
+            this.cellSize/2 - 1,
+            0,
+            Math.PI * 2
+        );
+        this.ctx.fill();
     }
 }
 
 // ==========================================
-// 11. МОДАЛЬНОЕ ОКНО ДЛЯ МУЗЫКИ
+// 11. МОБИЛЬНАЯ НАВИГАЦИЯ И ПРОГРЕСС
+// ==========================================
+const sectionNavBtn = document.getElementById('sectionNavBtn');
+const sectionProgressBar = document.getElementById('sectionProgressBar');
+let activeSection = null;
+
+function updateMobileNavigation() {
+    if (!isMobile()) {
+        sectionNavBtn.classList.remove('visible');
+        sectionProgressBar.style.width = '0';
+        return;
+    }
+
+    const scrollY = window.scrollY;
+    const viewportHeight = window.innerHeight;
+
+    // Находим текущую секцию
+    let currentSection = null;
+    sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= viewportHeight/2 && rect.bottom > viewportHeight/2) {
+            currentSection = section;
+        }
+    });
+
+    if (!currentSection) return;
+
+    const sectionTop = currentSection.offsetTop;
+    const sectionHeight = currentSection.offsetHeight;
+    const scrollableHeight = sectionHeight - viewportHeight;
+    const progress = Math.min(1, Math.max(0, (scrollY - sectionTop) / scrollableHeight));
+    sectionProgressBar.style.width = (progress * 100) + '%';
+
+    const isAtBottom = scrollY + viewportHeight >= sectionTop + sectionHeight - 5;
+    const isAtTop = scrollY <= sectionTop + 5;
+
+    if (isAtBottom && currentSection.nextElementSibling && currentSection.nextElementSibling.classList.contains('section')) {
+        sectionNavBtn.textContent = '↓';
+        sectionNavBtn.classList.add('visible');
+        sectionNavBtn.onclick = () => {
+            currentSection.nextElementSibling.scrollIntoView({ behavior: 'smooth' });
+        };
+    } else if (isAtTop && currentSection.previousElementSibling && currentSection.previousElementSibling.classList.contains('section')) {
+        sectionNavBtn.textContent = '↑';
+        sectionNavBtn.classList.add('visible');
+        sectionNavBtn.onclick = () => {
+            currentSection.previousElementSibling.scrollIntoView({ behavior: 'smooth' });
+        };
+    } else {
+        sectionNavBtn.classList.remove('visible');
+    }
+}
+
+if (isMobile()) {
+    window.addEventListener('scroll', updateMobileNavigation);
+    window.addEventListener('resize', updateMobileNavigation);
+    updateMobileNavigation();
+} else {
+    sectionNavBtn.style.display = 'none';
+    sectionProgressBar.style.display = 'none';
+}
+
+// ==========================================
+// 12. МОДАЛЬНОЕ ОКНО ДЛЯ МУЗЫКИ (как было)
 // ==========================================
 const listenModal = document.getElementById('listenModal');
 const modalSongTitle = document.getElementById('modalSongTitle');
 const modalLinksContainer = document.getElementById('modalLinks');
-const modalClose = document.getElementById('modalClose');
+const modalCloseBtn = document.getElementById('modalClose');
 
 if (listenModal) {
-    modalClose.addEventListener('click', () => {
+    modalCloseBtn.addEventListener('click', () => {
         listenModal.classList.remove('active');
     });
 
@@ -414,7 +586,7 @@ document.addEventListener('click', (e) => {
 });
 
 // ==========================================
-// 12. МОДАЛЬНОЕ ОКНО ДОСТИЖЕНИЙ
+// 13. МОДАЛЬНОЕ ОКНО ДОСТИЖЕНИЙ (как было)
 // ==========================================
 const statsBtn = document.getElementById('statsBtn');
 const statsModal = document.getElementById('statsModal');
@@ -462,7 +634,7 @@ function animateCounters() {
 }
 
 // ==========================================
-// 13. ИНДИКАТОР СЕКЦИЙ (только десктоп)
+// 14. ИНДИКАТОР СЕКЦИЙ (десктоп)
 // ==========================================
 const indicatorDots = document.querySelectorAll('.dot');
 
@@ -499,7 +671,7 @@ if (!isMobile()) {
 }
 
 // ==========================================
-// 14. КНОПКИ «ПОДРОБНЕЕ» В ТАЙМЛАЙНЕ
+// 15. КНОПКИ «ПОДРОБНЕЕ» В ТАЙМЛАЙНЕ (как было)
 // ==========================================
 document.querySelectorAll('.details-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -511,7 +683,7 @@ document.querySelectorAll('.details-btn').forEach(btn => {
 });
 
 // ==========================================
-// 15. ТОСТЫ
+// 16. ТОСТЫ (уведомления)
 // ==========================================
 function showToast(message) {
     const existingToast = document.querySelector('.toast');
@@ -535,7 +707,7 @@ function showToast(message) {
 }
 
 // ==========================================
-// 16. КОПИРОВАНИЕ EMAIL
+// 17. КОПИРОВАНИЕ EMAIL (как было)
 // ==========================================
 const copyEmailCard = document.getElementById('copyEmail');
 
@@ -555,7 +727,7 @@ if (copyEmailCard) {
 }
 
 // ==========================================
-// 17. МОДАЛКА "ДРУГИЕ НАВЫКИ"
+// 18. МОДАЛКА "ДРУГИЕ НАВЫКИ" (как было)
 // ==========================================
 const otherSkillsBtn = document.getElementById('otherSkillsBtn');
 const otherSkillsModal = document.getElementById('otherSkillsModal');

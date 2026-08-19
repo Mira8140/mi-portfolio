@@ -873,7 +873,6 @@ footer {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ==== ИЗМЕНЕННЫЙ БЛОК ЦИТАТЫ ==== */
 .spider-quote {
     position: fixed;
     top: 20px;
@@ -922,7 +921,7 @@ footer {
 }
 
 /* =============================================
-   МОДАЛЬНЫЕ ОКНА
+   МОДАЛЬНЫЕ ОКНА (общие)
 ============================================= */
 .modal-overlay {
     position: fixed;
@@ -1066,7 +1065,7 @@ footer {
 }
 
 /* =============================================
-   ИГРА «ЗМЕЙКА»
+   МОДАЛЬНОЕ ОКНО ИГРЫ «ЗМЕЙКА»
 ============================================= */
 .snake-modal {
     position: fixed;
@@ -1097,7 +1096,7 @@ footer {
     text-align: center;
     box-shadow: var(--shadow);
     position: relative;
-    max-width: 340px;
+    max-width: 360px;
     width: 90%;
 }
 
@@ -1110,13 +1109,54 @@ footer {
     font-size: 1.5rem;
     cursor: pointer;
     color: var(--text);
+    z-index: 10;
+}
+
+/* Контейнеры экранов */
+.snake-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.snake-screen.active {
+    display: flex;
+}
+
+#snakeLoading .preloader-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+#snakeLoading p {
+    color: var(--text);
+    opacity: 0.7;
+}
+
+#snakeIntro h3 {
+    color: var(--accent);
+    font-size: 1.5rem;
+}
+
+#snakeIntro p {
+    color: var(--text);
+    opacity: 0.8;
+}
+
+#snakeGame {
+    gap: 10px;
 }
 
 #snakeCanvas {
     background: #000;
     border-radius: 10px;
     display: block;
-    margin: 0 auto 15px;
+    margin: 0 auto;
 }
 
 .snake-score {
@@ -1128,11 +1168,36 @@ footer {
 .snake-hint {
     font-size: 0.8rem;
     opacity: 0.6;
-    margin-top: 5px;
+}
+
+#snakeGameOver h3 {
+    color: #e23636;
+    font-size: 1.8rem;
+}
+
+.snake-final-score {
+    font-size: 1.2rem;
+    color: var(--text);
+}
+
+#snakeGameOver .btn {
+    width: 100%;
+    max-width: 200px;
+    margin: 5px auto;
+}
+
+.btn-no {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+.btn-no:hover {
+    background: var(--border);
 }
 
 /* =============================================
-   PRELOADER
+   PRELOADER (общий)
 ============================================= */
 .preloader {
     position: fixed;
@@ -1199,6 +1264,48 @@ footer {
 .toast.show {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+}
+
+/* =============================================
+   МОБИЛЬНАЯ НАВИГАЦИЯ
+============================================= */
+.section-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--accent);
+    width: 0;
+    z-index: 150;
+    transition: width 0.2s ease;
+}
+
+.section-nav-btn {
+    position: fixed;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 150;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, background 0.3s;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-nav-btn.visible {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* =============================================
@@ -1432,16 +1539,16 @@ footer {
 
     /* Цитата паука — мобильная адаптация */
     .spider-quote {
-        top: 10px;
-        left: 50px;
-        font-size: 0.75rem;
-        padding: 10px 14px;
-        max-width: 200px;
-        white-space: normal;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        border: 1px solid #e23636;
-        box-sizing: border-box;
+        left: 40px !important;
+        top: -80px !important;
+        font-size: 0.75rem !important;
+        padding: 10px 14px !important;
+        max-width: 200px !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        border: 1px solid #e23636 !important;
+        box-sizing: border-box !important;
     }
 
     .section-indicator {
@@ -1502,5 +1609,18 @@ footer {
         bottom: 10px !important;
         font-size: 0.7rem !important;
         padding: 8px 12px !important;
+    }
+
+    /* Навигация */
+    .section-nav-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.2rem;
+        right: 10px;
+        top: 50%;
+    }
+
+    .section-progress-bar {
+        height: 3px;
     }
 }

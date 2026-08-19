@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мирон Остапенко — портфолио</title>
-    <!-- NEW: Подключение Google Fonts Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -30,18 +29,22 @@
         <span class="dot" data-target="#footer"></span>
     </nav>
 
+    <!-- Полоса прогресса секции (мобильные) -->
+    <div id="sectionProgressBar"></div>
+
+    <!-- Кнопка перехода между секциями (мобильные) -->
+    <button id="sectionNavBtn" class="section-nav-btn" aria-label="Перейти к секции">↓</button>
+
     <main class="snap-container">
         <!-- HERO -->
         <section id="hero" class="section">
             <div class="section-content">
                 <div class="hero-card" id="heroCard">
-                    <!-- NEW: Стикер-облако -->
                     <div class="sticker">можно просто Мира :)</div>
                     <div class="card-front">
                         <img src="imagesss/MiFot.jpg" alt="Мирон" class="avatar">
                         <h1 class="name">Мирон Остапенко</h1>
                         <p class="subtitle">"Жить – не тужить, никого не осуждать, никому не досаждать, и всем мое почтение" - прп. Амвросий Оптинский</p>
-                        <!-- NEW: Возраст и город -->
                         <p class="extra-info">20 лет · Москва</p>
                         <p class="typing-text"><span id="typed"></span></p>
                         <div class="hero-buttons">
@@ -54,12 +57,11 @@
             </div>
         </section>
 
-        <!-- ТАЙМЛАЙН (МОЙ ПУТЬ) -->
+        <!-- ТАЙМЛАЙН -->
         <section id="timeline" class="section">
             <div class="section-content">
                 <h2>Мой путь</h2>
                 <div class="timeline">
-                    <!-- NEW: добавлен класс stagger-item -->
                     <div class="timeline-item left stagger-item">
                         <div class="content">
                             <h3>2012–2021</h3>
@@ -115,7 +117,6 @@
                 </div>
                 <div class="tab-content active" id="music">
                     <div class="cards-grid">
-                        <!-- NEW: класс stagger-item добавлен к каждой fav-card -->
                         <div class="fav-card music-card stagger-item">
                             <img src="imagesss/Sickick.jpg" alt="Обложка трека">
                             <p class="song-info">Sickick — Often</p>
@@ -187,7 +188,6 @@
             <div class="section-content">
                 <h2>Навыки</h2>
                 <div class="skills-grid">
-                    <!-- NEW: класс stagger-item добавлен к каждой skill-card -->
                     <div class="skill-card stagger-item" data-progress="90">
                         <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M4 4l16 16M20 4L4 20"></path>
@@ -246,15 +246,14 @@
                         </div>
                         <span class="skill-level">Средний</span>
                     </div>
-                    <!-- NEW: Карточка "Другие" -->
-<div class="skill-card skill-card-other stagger-item" id="otherSkillsBtn">
-    <svg class="skill-icon" viewBox="0 0 24 24" fill="currentColor">
-        <circle cx="12" cy="5" r="2"></circle>
-        <circle cx="12" cy="12" r="2"></circle>
-        <circle cx="12" cy="19" r="2"></circle>
-    </svg>
-    <span class="skill-name">Другие</span>
-</div>
+                    <div class="skill-card skill-card-other stagger-item" id="otherSkillsBtn">
+                        <svg class="skill-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="5" r="2"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <circle cx="12" cy="19" r="2"></circle>
+                        </svg>
+                        <span class="skill-name">Другие</span>
+                    </div>
                 </div>
                 <button id="statsBtn" class="btn stats-btn">Достижения</button>
             </div>
@@ -265,7 +264,6 @@
             <div class="section-content">
                 <h2>Контакты</h2>
                 <div class="contacts-grid">
-                    <!-- NEW: класс stagger-item добавлен к каждой contact-card -->
                     <a href="https://github.com/твой-логин" target="_blank" class="contact-card stagger-item">
                         <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.17c-3.2.7-3.88-1.37-3.88-1.37-.53-1.35-1.3-1.71-1.3-1.71-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.41-1.27.74-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.69 5.41-5.25 5.69.42.36.8 1.07.8 2.16v3.2c0 .31.21.68.8.56C20.71 21.39 24 17.08 24 12 24 5.65 18.85.5 12 .5z"/>
@@ -333,11 +331,31 @@
     <!-- Модальное окно для игры "Змейка" -->
     <div id="snakeModal" class="snake-modal">
         <div class="snake-modal-content">
+            <!-- Экран загрузки -->
+            <div id="snakeLoading" class="snake-screen active">
+                <div class="preloader-spinner"></div>
+                <p>Загрузка...</p>
+            </div>
+            <!-- Экран интро -->
+            <div id="snakeIntro" class="snake-screen">
+                <h3>Опа! Найдена пасхалка!</h3>
+                <p>Это игра «Змейка». Готовы?</p>
+                <button id="snakeStartBtn" class="btn">Начать игру</button>
+            </div>
+            <!-- Экран игры -->
+            <div id="snakeGame" class="snake-screen">
+                <canvas id="snakeCanvas" width="300" height="300"></canvas>
+                <p class="snake-score">Счёт: <span id="snakeScore">0</span></p>
+                <p class="snake-hint">Управление стрелками · Пауза: Space</p>
+            </div>
+            <!-- Экран Game Over -->
+            <div id="snakeGameOver" class="snake-screen">
+                <h3>Игра окончена!</h3>
+                <p class="snake-final-score">Ваш счёт: <span id="snakeFinalScore">0</span></p>
+                <button id="snakeRestartBtn" class="btn">Сыграть ещё раз</button>
+                <button id="snakeExitBtn" class="btn btn-no">Покинуть игру</button>
+            </div>
             <button class="snake-close" id="snakeClose">✕</button>
-            <h3>Змейка</h3>
-            <canvas id="snakeCanvas" width="300" height="300"></canvas>
-            <p class="snake-score">Счёт: <span id="snakeScore">0</span></p>
-            <p class="snake-hint">Управление стрелками на клавиатуре</p>
         </div>
     </div>
 
@@ -366,33 +384,32 @@
             </div>
         </div>
     </div>
-<!-- Модальное окно "Другие навыки" -->
-<div id="otherSkillsModal" class="modal-overlay">
-    <div class="modal other-skills-modal">
-        <button class="modal-close" id="otherSkillsModalClose">✕</button>
-        <h3>Другие навыки</h3>
-        <div class="other-skills-grid">
-            <!-- Мини-карточка Python -->
-            <div class="other-skill-card">
-                <span class="other-skill-icon">🐍</span>
-                <span class="other-skill-name">Python</span>
-                <div class="progress-bar">
-                    <div class="progress-fill" data-progress="50"></div>
+
+    <!-- Модальное окно "Другие навыки" -->
+    <div id="otherSkillsModal" class="modal-overlay">
+        <div class="modal other-skills-modal">
+            <button class="modal-close" id="otherSkillsModalClose">✕</button>
+            <h3>Другие навыки</h3>
+            <div class="other-skills-grid">
+                <div class="other-skill-card">
+                    <span class="other-skill-icon">🐍</span>
+                    <span class="other-skill-name">Python</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-progress="50"></div>
+                    </div>
+                    <span class="skill-level">Базовый</span>
                 </div>
-                <span class="skill-level">Базовый</span>
-            </div>
-            <!-- Мини-карточка C++ -->
-            <div class="other-skill-card">
-                <span class="other-skill-icon">⚙️</span>
-                <span class="other-skill-name">C++</span>
-                <div class="progress-bar">
-                    <div class="progress-fill" data-progress="50"></div>
+                <div class="other-skill-card">
+                    <span class="other-skill-icon">⚙️</span>
+                    <span class="other-skill-name">C++</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-progress="50"></div>
+                    </div>
+                    <span class="skill-level">Базовый</span>
                 </div>
-                <span class="skill-level">Базовый</span>
             </div>
         </div>
     </div>
-</div>
 
     <script src="script.js"></script>
 </body>
