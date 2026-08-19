@@ -2,6 +2,7 @@
 // ПРОВЕРКА ШИРИНЫ ЭКРАНА (динамическая)
 // ==========================================
 const isMobile = () => window.innerWidth <= 600;
+const isHoverDevice = () => window.matchMedia('(hover: hover)').matches;
 
 // ==========================================
 // 1. ПЕРЕКЛЮЧЕНИЕ ТЕМЫ
@@ -19,11 +20,11 @@ if (localStorage.getItem('theme') === 'dark') {
 }
 
 // ==========================================
-// 2. 3D-ЭФФЕКТ HERO (только десктоп)
+// 2. 3D-ЭФФЕКТ HERO (только устройства с мышью)
 // ==========================================
 const heroCard = document.getElementById('heroCard');
 
-if (heroCard && !isMobile()) {
+if (heroCard && isHoverDevice()) {
     heroCard.addEventListener('mousemove', (e) => {
         const rect = heroCard.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -470,97 +471,7 @@ class SnakeGame {
 }
 
 // ==========================================
-// 11. МОБИЛЬНАЯ НАВИГАЦИЯ И ПРОГРЕСС
-// ==========================================
-const sectionNavBtn = document.getElementById('sectionNavBtn');
-const sectionProgressBar = document.getElementById('sectionProgressBar');
-let activeSection = null;
-let isAnimating = false;
-
-function getCurrentSection() {
-    const viewportHeight = window.innerHeight;
-    let current = null;
-    sections.forEach(section => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= viewportHeight/2 && rect.bottom > viewportHeight/2) {
-            current = section;
-        }
-    });
-    return current;
-}
-
-function lockScrollToSection(section) {
-    const sectionTop = section.offsetTop;
-    const sectionBottom = sectionTop + section.offsetHeight;
-    const maxScroll = sectionBottom - window.innerHeight;
-    const currentScroll = window.scrollY;
-
-    if (currentScroll < sectionTop) {
-        window.scrollTo({ top: sectionTop, behavior: 'auto' });
-        return true;
-    } else if (currentScroll > maxScroll && maxScroll > 0) {
-        window.scrollTo({ top: maxScroll, behavior: 'auto' });
-        return true;
-    }
-    return false;
-}
-
-function updateMobileNavigation() {
-    if (!isMobile()) {
-        sectionNavBtn.classList.remove('visible');
-        sectionProgressBar.style.width = '0';
-        return;
-    }
-
-    const section = getCurrentSection();
-    if (!section) return;
-
-    // Блокируем выход за пределы секции (если не анимация)
-    if (!isAnimating) {
-        lockScrollToSection(section);
-    }
-
-    const sectionTop = section.offsetTop;
-    const sectionHeight = section.offsetHeight;
-    const scrollableHeight = sectionHeight - window.innerHeight;
-    const progress = scrollableHeight > 0 ? Math.min(1, Math.max(0, (window.scrollY - sectionTop) / scrollableHeight)) : 0;
-    sectionProgressBar.style.width = (progress * 100) + '%';
-
-    const isAtBottom = scrollableHeight > 0 && window.scrollY + window.innerHeight >= sectionTop + sectionHeight - 5;
-    const isAtTop = window.scrollY <= sectionTop + 5;
-
-    if (isAtBottom && section.nextElementSibling && section.nextElementSibling.classList.contains('section')) {
-        sectionNavBtn.textContent = '↓';
-        sectionNavBtn.classList.add('visible');
-        sectionNavBtn.onclick = () => {
-            isAnimating = true;
-            section.nextElementSibling.scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => { isAnimating = false; }, 1000);
-        };
-    } else if (isAtTop && section.previousElementSibling && section.previousElementSibling.classList.contains('section')) {
-        sectionNavBtn.textContent = '↑';
-        sectionNavBtn.classList.add('visible');
-        sectionNavBtn.onclick = () => {
-            isAnimating = true;
-            section.previousElementSibling.scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => { isAnimating = false; }, 1000);
-        };
-    } else {
-        sectionNavBtn.classList.remove('visible');
-    }
-}
-
-if (isMobile()) {
-    window.addEventListener('scroll', updateMobileNavigation);
-    window.addEventListener('resize', updateMobileNavigation);
-    updateMobileNavigation();
-} else {
-    sectionNavBtn.style.display = 'none';
-    sectionProgressBar.style.display = 'none';
-}
-
-// ==========================================
-// 12. МОДАЛЬНОЕ ОКНО ДЛЯ МУЗЫКИ (как было)
+// 11. МОДАЛЬНОЕ ОКНО ДЛЯ МУЗЫКИ
 // ==========================================
 const listenModal = document.getElementById('listenModal');
 const modalSongTitle = document.getElementById('modalSongTitle');
@@ -606,7 +517,7 @@ document.addEventListener('click', (e) => {
 });
 
 // ==========================================
-// 13. МОДАЛЬНОЕ ОКНО ДОСТИЖЕНИЙ (как было)
+// 12. МОДАЛЬНОЕ ОКНО ДОСТИЖЕНИЙ
 // ==========================================
 const statsBtn = document.getElementById('statsBtn');
 const statsModal = document.getElementById('statsModal');
@@ -654,7 +565,7 @@ function animateCounters() {
 }
 
 // ==========================================
-// 14. ИНДИКАТОР СЕКЦИЙ (десктоп)
+// 13. ИНДИКАТОР СЕКЦИЙ (десктоп)
 // ==========================================
 const indicatorDots = document.querySelectorAll('.dot');
 
@@ -691,19 +602,19 @@ if (!isMobile()) {
 }
 
 // ==========================================
-// 15. КНОПКИ «ПОДРОБНЕЕ» В ТАЙМЛАЙНЕ (как было)
+// 14. КНОПКИ «ПОДРОБНЕЕ» В ТАЙМЛАЙНЕ
 // ==========================================
 document.querySelectorAll('.details-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         const content = btn.nextElementSibling;
         if (!content) return;
         content.classList.toggle('open');
-        btn.textContent = content.classList.contains('open') ? 'Скрыть' : 'Подробнее';
+        btn.textContent = content.classList.contains('open') ? 'Закрыть' : 'Подробнее';
     });
 });
 
 // ==========================================
-// 16. ТОСТЫ
+// 15. ТОСТЫ
 // ==========================================
 function showToast(message) {
     const existingToast = document.querySelector('.toast');
@@ -727,7 +638,7 @@ function showToast(message) {
 }
 
 // ==========================================
-// 17. КОПИРОВАНИЕ EMAIL (как было)
+// 16. КОПИРОВАНИЕ EMAIL
 // ==========================================
 const copyEmailCard = document.getElementById('copyEmail');
 
@@ -747,7 +658,7 @@ if (copyEmailCard) {
 }
 
 // ==========================================
-// 18. МОДАЛКА "ДРУГИЕ НАВЫКИ" (как было)
+// 17. МОДАЛКА "ДРУГИЕ НАВЫКИ"
 // ==========================================
 const otherSkillsBtn = document.getElementById('otherSkillsBtn');
 const otherSkillsModal = document.getElementById('otherSkillsModal');

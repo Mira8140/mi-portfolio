@@ -9,6 +9,7 @@
     --accent: #2c2c2c;
     --shadow: 0 20px 40px rgba(0,0,0,0.1);
     --vignette: rgba(255,255,255,0.45);
+    --particle-color: rgba(0,0,0,0.2);
 }
 
 body.dark {
@@ -19,6 +20,7 @@ body.dark {
     --accent: #ffffff;
     --shadow: 0 20px 40px rgba(255,255,255,0.05);
     --vignette: rgba(0,0,0,0.65);
+    --particle-color: rgba(255,255,255,0.2);
 }
 
 * {
@@ -42,6 +44,7 @@ h1, h2, h3, .name {
     font-weight: 700;
 }
 
+/* Стеклянные заголовки секций */
 h2 {
     font-size: 2rem;
     margin-bottom: 40px;
@@ -49,6 +52,18 @@ h2 {
     color: var(--accent);
     position: relative;
     z-index: 1;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 10px 30px;
+    display: inline-block;
+}
+
+body.dark h2 {
+    background: rgba(30, 30, 30, 0.7);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* =============================================
@@ -89,9 +104,7 @@ h2 {
     transform: scale(1);
 }
 
-/* =============================================
-   ГРАДИЕНТНЫЕ ПЕРЕХОДЫ МЕЖДУ СЕКЦИЯМИ
-============================================= */
+/* Градиентные переходы между секциями */
 .section::before,
 .section::after {
     content: '';
@@ -113,70 +126,20 @@ h2 {
     background: linear-gradient(to top, var(--vignette), transparent);
 }
 
-/* =============================================
-   ФОНЫ ДЛЯ КАЖДОЙ СЕКЦИИ (с учётом темы)
-============================================= */
-body:not(.dark) #hero {
-    background-image: 
-        linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)),
-        url('imagesss/sec5.jpg');
-}
-body:not(.dark) #timeline {
-    background-image: 
-        linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
-        url('imagesss/sec1.jpg');
-}
-body:not(.dark) #favorites {
-    background-image: 
-        linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
-        url('imagesss/sec2.jpg');
-}
-body:not(.dark) #skills {
-    background-image: 
-        linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
-        url('imagesss/sec3.jpg');
-}
-body:not(.dark) #contacts {
-    background-image: 
-        linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
-        url('imagesss/sec4.jpg');
-}
-body:not(.dark) footer.section {
-    background-image: 
-        linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
-        url('imagesss/sec6.jpg');
-}
+/* Фоны секций */
+body:not(.dark) #hero { background-image: linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url('imagesss/sec5.jpg'); }
+body:not(.dark) #timeline { background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), url('imagesss/sec1.jpg'); }
+body:not(.dark) #favorites { background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), url('imagesss/sec2.jpg'); }
+body:not(.dark) #skills { background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), url('imagesss/sec3.jpg'); }
+body:not(.dark) #contacts { background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), url('imagesss/sec4.jpg'); }
+body:not(.dark) footer.section { background-image: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url('imagesss/sec6.jpg'); }
 
-body.dark #hero {
-    background-image: 
-        linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
-        url('imagesss/sec5.jpg');
-}
-body.dark #timeline {
-    background-image: 
-        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-        url('imagesss/sec1.jpg');
-}
-body.dark #favorites {
-    background-image: 
-        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-        url('imagesss/sec2.jpg');
-}
-body.dark #skills {
-    background-image: 
-        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-        url('imagesss/sec3.jpg');
-}
-body.dark #contacts {
-    background-image: 
-        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-        url('imagesss/sec4.jpg');
-}
-body.dark footer.section {
-    background-image: 
-        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-        url('imagesss/sec6.jpg');
-}
+body.dark #hero { background-image: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('imagesss/sec5.jpg'); }
+body.dark #timeline { background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('imagesss/sec1.jpg'); }
+body.dark #favorites { background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('imagesss/sec2.jpg'); }
+body.dark #skills { background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('imagesss/sec3.jpg'); }
+body.dark #contacts { background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('imagesss/sec4.jpg'); }
+body.dark footer.section { background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('imagesss/sec6.jpg'); }
 
 /* =============================================
    КНОПКИ: ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ И «НАВЕРХ»
@@ -227,9 +190,7 @@ body.dark footer.section {
     pointer-events: auto;
 }
 
-/* =============================================
-   ИНДИКАТОР СЕКЦИЙ (десктоп)
-============================================= */
+/* Индикатор секций */
 .section-indicator {
     position: fixed;
     top: 50%;
@@ -424,21 +385,24 @@ body.dark .sticker {
     background: var(--bg);
 }
 
+/* Кнопка "Подробнее" */
 .details-btn {
     background: transparent;
-    border: none;
+    border: 1px solid var(--accent);
     color: var(--accent);
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 500;
-    margin-top: 10px;
-    padding: 5px 0;
-    text-decoration: underline;
-    transition: opacity 0.3s;
+    margin-top: 12px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s;
 }
 
 .details-btn:hover {
-    opacity: 0.7;
+    background: var(--accent);
+    color: var(--bg);
 }
 
 .details-content {
@@ -474,8 +438,21 @@ body.dark .sticker {
     cursor: pointer;
     color: var(--text);
     transition: all 0.3s;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.05);
 }
 
+body.dark .tab-btn {
+    background: rgba(30, 30, 30, 0.8); /* более плотный фон для читаемости */
+    color: #e0e0e0;                     /* явный светлый цвет текста */
+    border-color: rgba(255,255,255,0.2);
+}
+body.dark .tab-btn.active {
+    background: #ffffff;
+    color: #1a1a1a;
+    border-color: #ffffff;
+}
 .tab-btn.active {
     background: var(--accent);
     color: var(--bg);
@@ -1266,48 +1243,6 @@ footer {
 }
 
 /* =============================================
-   МОБИЛЬНАЯ НАВИГАЦИЯ
-============================================= */
-.section-progress-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 3px;
-    background: var(--accent);
-    width: 0;
-    z-index: 150;
-    transition: width 0.2s ease;
-}
-
-.section-nav-btn {
-    position: fixed;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 150;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    font-size: 1.4rem;
-    cursor: pointer;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s, background 0.3s;
-    box-shadow: var(--shadow);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.section-nav-btn.visible {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-/* =============================================
    АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ
 ============================================= */
 @media (max-width: 600px) {
@@ -1317,10 +1252,46 @@ footer {
         overflow-x: hidden !important;
     }
 
+    /* Мобильный фон с частицами */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(circle, var(--particle-color) 1px, transparent 1px);
+        background-size: 50px 50px;
+        pointer-events: none;
+        z-index: 0;
+        animation: backgroundMove 20s linear infinite;
+    }
+
+    body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(circle, var(--particle-color) 1.5px, transparent 1.5px);
+        background-size: 80px 80px;
+        pointer-events: none;
+        z-index: 0;
+        animation: backgroundMove 30s linear infinite reverse;
+    }
+
+    @keyframes backgroundMove {
+        0% { background-position: 0 0; }
+        100% { background-position: 0 100px; }
+    }
+
     .snap-container {
         height: auto !important;
         overflow: visible !important;
         scroll-snap-type: none !important;
+        position: relative;
+        z-index: 1;
     }
 
     .section {
@@ -1334,6 +1305,13 @@ footer {
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
+        background-image: none !important;
+        box-shadow: none !important;
+    }
+
+    .section::before,
+    .section::after {
+        display: none !important;
     }
 
     /* Hero */
@@ -1405,7 +1383,8 @@ footer {
     }
     .details-btn {
         font-size: 0.75rem !important;
-        margin-top: 5px !important;
+        padding: 6px 12px !important;
+        margin-top: 8px !important;
     }
     .details-content {
         font-size: 0.75rem !important;
@@ -1415,9 +1394,10 @@ footer {
     .favorites-tabs {
         gap: 6px !important;
         margin-bottom: 15px !important;
+        flex-wrap: wrap;
     }
     .tab-btn {
-        padding: 5px 10px !important;
+        padding: 6px 12px !important;
         font-size: 0.7rem !important;
         border-radius: 15px !important;
     }
@@ -1608,18 +1588,5 @@ footer {
         bottom: 10px !important;
         font-size: 0.7rem !important;
         padding: 8px 12px !important;
-    }
-
-    /* Навигация */
-    .section-nav-btn {
-        width: 44px;
-        height: 44px;
-        font-size: 1.2rem;
-        right: 10px;
-        top: 50%;
-    }
-
-    .section-progress-bar {
-        height: 3px;
     }
 }

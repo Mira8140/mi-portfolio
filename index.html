@@ -19,7 +19,7 @@
     <!-- Кнопка переключения темы -->
     <button id="themeToggle" class="theme-toggle" aria-label="Сменить тему">🌓</button>
 
-    <!-- Индикатор секций -->
+    <!-- Индикатор секций (десктоп) -->
     <nav class="section-indicator" id="sectionIndicator">
         <span class="dot" data-target="#hero"></span>
         <span class="dot" data-target="#timeline"></span>
@@ -28,12 +28,6 @@
         <span class="dot" data-target="#contacts"></span>
         <span class="dot" data-target="#footer"></span>
     </nav>
-
-    <!-- Полоса прогресса секции (мобильные) -->
-    <div id="sectionProgressBar"></div>
-
-    <!-- Кнопка перехода между секциями (мобильные) -->
-    <button id="sectionNavBtn" class="section-nav-btn" aria-label="Перейти к секции">↓</button>
 
     <main class="snap-container">
         <!-- HERO -->
@@ -331,24 +325,20 @@
     <!-- Модальное окно для игры "Змейка" -->
     <div id="snakeModal" class="snake-modal">
         <div class="snake-modal-content">
-            <!-- Экран загрузки -->
             <div id="snakeLoading" class="snake-screen active">
                 <div class="preloader-spinner"></div>
                 <p>Загрузка...</p>
             </div>
-            <!-- Экран интро -->
             <div id="snakeIntro" class="snake-screen">
                 <h3>Опа! Найдена пасхалка!</h3>
                 <p>Это игра «Змейка». Готовы?</p>
                 <button id="snakeStartBtn" class="btn">Начать игру</button>
             </div>
-            <!-- Экран игры -->
             <div id="snakeGame" class="snake-screen">
                 <canvas id="snakeCanvas" width="300" height="300"></canvas>
                 <p class="snake-score">Счёт: <span id="snakeScore">0</span></p>
                 <p class="snake-hint">Управление стрелками · Пауза: Space</p>
             </div>
-            <!-- Экран Game Over -->
             <div id="snakeGameOver" class="snake-screen">
                 <h3>Игра окончена!</h3>
                 <p class="snake-final-score">Ваш счёт: <span id="snakeFinalScore">0</span></p>
